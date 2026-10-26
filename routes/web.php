@@ -6,7 +6,14 @@ use App\Services\Post\PostInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use RealRashid\SweetAlert\Facades\Alert;
-
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\PostController;
+use App\Http\Controllers\Admin\TentorController;
+use App\Http\Controllers\Admin\TrainingCategoryController;
+use App\Http\Controllers\Admin\TrainingController;
+use App\Http\Controllers\Admin\UserController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes - Akademi Pelatihan
@@ -51,49 +58,14 @@ Route::post('/kontak', function (Request $request) {
     return redirect()->route('kontak');
 });
 
-use App\Http\Controllers\Auth\LoginController;
-
-// ==========================================
-// 2. AUTHENTICATION (LOGIN, REGISTER, LOGOUT)
-// ==========================================
-
 Route::get('/login', [LoginController::class, 'create'])->name('login');
 Route::post('/login', [LoginController::class, 'store'])->name('login.post');
 
-Route::get('/register', function () {
-    return view('auth.Register.register', [
-        'title' => 'Daftar Pelatihan - Akademi Pelatihan',
-        'metaDescription' => 'Pendaftaran akun peserta baru untuk guru, siswa, dan masyarakat umum di Akademi Pelatihan.',
-    ]);
-})->name('register');
-
-Route::post('/register', function (Request $request) {
-    // Validasi field canonical: name, email, password, password_confirmation, participant_type, institution, phone
-    $request->validate([
-        'name' => 'required|string|max:255',
-        'email' => 'required|email|max:255',
-        'password' => 'required|min:8|confirmed',
-        'participant_type' => 'required|string',
-        'institution' => 'required|string|max:255',
-        'phone' => 'required|string|max:20',
-    ]);
-
-    Alert::success('Pendaftaran Berhasil', 'Akun ' . htmlspecialchars($request->name) . ' berhasil terdaftar sebagai ' . htmlspecialchars($request->participant_type) . '. Silakan masuk.');
-    return redirect()->route('login');
-});
+Route::get('/register', [RegisterController::class, 'create'])->name('register');
+Route::post('/register', [RegisterController::class, 'store'])->name('register.post');
 
 Route::post('/logout', [LoginController::class, 'destroy'])->name('logout');
 
-// ==========================================
-// 3. ROLE-BASED DASHBOARDS (ADMIN, TENTOR, PESERTA)
-// ==========================================
-
-use App\Http\Controllers\Admin\DashboardController;
-use App\Http\Controllers\Admin\PostController;
-use App\Http\Controllers\Admin\TentorController;
-use App\Http\Controllers\Admin\TrainingCategoryController;
-use App\Http\Controllers\Admin\TrainingController;
-use App\Http\Controllers\Admin\UserController;
 
 Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('admin');

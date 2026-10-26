@@ -3,6 +3,7 @@
 namespace App\Services\User;
 
 use App\DTOs\Users\CreateTentorDTO;
+use App\DTOs\Users\RegisterPesertaDTO;
 use App\DTOs\Users\UpdateUserDTO;
 use App\Models\User;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
@@ -18,6 +19,8 @@ interface UserInterface
     public function getById(int $id): User;
 
     public function createTentor(CreateTentorDTO $dto): User;
+
+    public function registerPeserta(RegisterPesertaDTO $dto): User;
 
     public function update(int $id, UpdateUserDTO $dto): User;
 

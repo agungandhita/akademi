@@ -3,6 +3,7 @@
 namespace App\Services\User;
 
 use App\DTOs\Users\CreateTentorDTO;
+use App\DTOs\Users\RegisterPesertaDTO;
 use App\DTOs\Users\UpdateUserDTO;
 use App\Enums\UserRole;
 use App\Models\User;
@@ -47,6 +48,21 @@ class UserService implements UserInterface
             'expertise' => $dto->expertise,
             'phone' => $dto->phone,
             'avatar' => $dto->avatar,
+            'is_active' => true,
+            'email_verified_at' => now(),
+        ]);
+    }
+
+    public function registerPeserta(RegisterPesertaDTO $dto): User
+    {
+        return User::create([
+            'name' => $dto->name,
+            'email' => $dto->email,
+            'password' => Hash::make($dto->password),
+            'role' => UserRole::Peserta,
+            'participant_type' => $dto->participantType,
+            'institution' => $dto->institution,
+            'phone' => $dto->phone,
             'is_active' => true,
             'email_verified_at' => now(),
         ]);
