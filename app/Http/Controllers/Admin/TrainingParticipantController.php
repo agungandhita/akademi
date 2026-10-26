@@ -6,8 +6,10 @@ use App\Enums\EnrollmentStatus;
 use App\Http\Controllers\Controller;
 use App\Services\Enrollment\EnrollmentInterface;
 use App\Services\Training\TrainingInterface;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+use RealRashid\SweetAlert\Facades\Alert;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class TrainingParticipantController extends Controller
@@ -87,5 +89,17 @@ class TrainingParticipantController extends Controller
 
             fclose($handle);
         }, 200, $headers);
+    }
+
+    /**
+     * Hapus pendaftaran peserta dari program pelatihan (ADM-08).
+     */
+    public function destroy(int $trainingId, int $enrollmentId): RedirectResponse
+    {
+        $this->enrollmentService->delete($enrollmentId);
+
+        Alert::success('Berhasil Dihapus', 'Pendaftaran peserta berhasil dihapus dari pelatihan.');
+
+        return redirect()->route('admin.trainings.participants', $trainingId);
     }
 }

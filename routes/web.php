@@ -91,6 +91,7 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
     // ADM-08: Daftar Peserta Pelatihan & Ekspor CSV
     Route::get('/trainings/{training}/participants', [AdminTrainingParticipantController::class, 'index'])->name('admin.trainings.participants');
     Route::get('/trainings/{training}/participants/export', [AdminTrainingParticipantController::class, 'export'])->name('admin.trainings.participants.export');
+    Route::delete('/trainings/{training}/participants/{enrollment}', [AdminTrainingParticipantController::class, 'destroy'])->name('admin.trainings.participants.destroy');
 
     // ADM-10: Berita & Artikel (Bisa diakses melalui URL /admin/posts maupun /admin/berita)
     Route::resource('posts', PostController::class, ['as' => 'admin']);

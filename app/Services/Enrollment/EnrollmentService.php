@@ -179,4 +179,11 @@ class EnrollmentService implements EnrollmentInterface
             'upcomingSessionsCount' => $upcomingSessionsCount,
         ];
     }
+
+    public function delete(int $enrollmentId): bool
+    {
+        $enrollment = Enrollment::findOrFail($enrollmentId);
+
+        return (bool) $enrollment->delete();
+    }
 }

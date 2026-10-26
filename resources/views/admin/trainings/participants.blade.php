@@ -205,12 +205,28 @@
 
                         <!-- Action -->
                         <td class="py-4 px-5 sm:px-6 text-right">
-                            @if($user)
-                                <a href="{{ route('admin.users.show', $user->id) }}" class="inline-flex items-center gap-1 px-3 py-1.5 bg-surface-container hover:bg-secondary hover:text-white font-semibold text-xs rounded-xl transition-colors cursor-pointer text-primary">
-                                    <span class="material-symbols-outlined text-[15px]">visibility</span>
-                                    <span>Detail User</span>
-                                </a>
-                            @endif
+                            <div class="inline-flex items-center justify-end gap-1.5">
+                                @if($user)
+                                    <a href="{{ route('admin.users.show', $user->id) }}" 
+                                       class="inline-flex items-center gap-1 px-2.5 py-1.5 bg-surface-container hover:bg-secondary hover:text-white font-semibold text-xs rounded-xl transition-all shadow-2xs text-primary cursor-pointer"
+                                       title="Lihat Detail Profil Pengguna">
+                                        <span class="material-symbols-outlined text-[15px]">visibility</span>
+                                        <span class="hidden sm:inline">Detail User</span>
+                                    </a>
+                                @endif
+
+                                <form method="POST" action="{{ route('admin.trainings.participants.destroy', [$training->id, $enrollment->id]) }}" class="form-delete inline" data-title="{{ $user?->name ?? 'Peserta' }}">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="button" 
+                                            onclick="confirmDelete(event, '{{ addslashes($user?->name ?? 'Peserta') }}', 'Apakah Anda yakin ingin menghapus peserta <strong>&quot;{{ addslashes($user?->name ?? 'Peserta') }}&quot;</strong> dari program pelatihan ini?<br><span style=\'font-size:12px;color:#6b7280;margin-top:6px;display:block;\'>Peserta tidak akan lagi terdaftar pada pelatihan ini.</span>')"
+                                            class="inline-flex items-center gap-1 px-2.5 py-1.5 bg-error/10 hover:bg-error hover:text-white text-error font-semibold text-xs rounded-xl transition-all shadow-2xs cursor-pointer hover:scale-[1.02]" 
+                                            title="Hapus Peserta dari Pelatihan">
+                                        <span class="material-symbols-outlined text-[15px]">person_remove</span>
+                                        <span>Hapus</span>
+                                    </button>
+                                </form>
+                            </div>
                         </td>
                     </tr>
                     @empty

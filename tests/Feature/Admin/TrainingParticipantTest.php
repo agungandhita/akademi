@@ -345,3 +345,21 @@ test('pendaftaran belum bisa dilakukan jika waktu pendaftaran belum dibuka', fun
         'training_id' => $this->training->id,
     ]);
 });
+
+test('admin dapat menghapus pendaftaran peserta dari pelatihan (ADM-08)', function () {
+    $enrollment = Enrollment::create([
+        'user_id' => $this->peserta->id,
+        'training_id' => $this->training->id,
+        'status' => EnrollmentStatus::Registered,
+        'enrolled_at' => now(),
+    ]);
+
+    $response = $this->actingAs($this->admin)
+        ->delete(route('admin.trainings.participants.destroy', [$this->training->id, $enrollment->id]));
+
+    $response->assertRedirect(route('admin.trainings.participants', $this->training->id));
+
+    $this->assertSoftDeleted('enrollments', [
+        'id' => $enrollment->id,
+    ]);
+});

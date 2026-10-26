@@ -67,4 +67,9 @@ interface EnrollmentInterface
      * @return array{enrolledCount: int, completedCount: int, upcomingSessionsCount: int}
      */
     public function getParticipantStats(int $userId): array;
+
+    /**
+     * Menghapus pendaftaran peserta dari suatu pelatihan.
+     */
+    public function delete(int $enrollmentId): bool;
 }
