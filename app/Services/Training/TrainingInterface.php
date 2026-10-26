@@ -7,6 +7,7 @@ use App\DTOs\Trainings\UpdateTrainingDTO;
 use App\Models\Training;
 use App\Models\TrainingSession;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Collection;
 
 interface TrainingInterface
 {
@@ -41,5 +42,20 @@ interface TrainingInterface
     /**
      * @return array{total: int, published: int, draft: int, closed: int, archived: int}
      */
-    public function getTrainingStatusCounts(): array;
+     public function getTrainingStatusCounts(): array;
+
+    /**
+     * @return array{online: int, blended: int, offline: int}
+     */
+    public function getTrainingModeCounts(): array;
+
+    /**
+     * @return Collection<int, Training>
+     */
+    public function getRecentTrainings(int $limit = 5): Collection;
+
+    /**
+     * @return Collection<int, Training>
+     */
+    public function getByInstructor(int $instructorId): Collection;
 }

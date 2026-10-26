@@ -42,10 +42,16 @@
                 </span>
             </div>
             <div class="flex items-baseline gap-2">
-                <span class="font-headline text-2xl sm:text-3xl font-black text-primary">2</span>
-                <span class="text-xs font-bold text-secondary bg-secondary-fixed px-2 py-0.5 rounded-md">Terdaftar</span>
+                <span class="font-headline text-2xl sm:text-3xl font-black text-primary">{{ $enrolledCount ?? 0 }}</span>
+                @if (($enrolledCount ?? 0) > 0)
+                    <span class="text-xs font-bold text-secondary bg-secondary-fixed px-2 py-0.5 rounded-md">Terdaftar</span>
+                @else
+                    <span class="text-xs font-bold text-outline bg-surface-container px-2 py-0.5 rounded-md">Belum Ada</span>
+                @endif
             </div>
-            <p class="text-xs text-on-surface-variant mt-2">Semua program berstatus aktif</p>
+            <p class="text-xs text-on-surface-variant mt-2">
+                {{ ($enrolledCount ?? 0) > 0 ? 'Semua program berstatus aktif' : 'Belum ada program yang diikuti' }}
+            </p>
         </div>
 
         <!-- Card 2: Modul Selesai -->
@@ -57,10 +63,14 @@
                 </span>
             </div>
             <div class="flex items-baseline gap-2">
-                <span class="font-headline text-2xl sm:text-3xl font-black text-primary">6 / 8</span>
-                <span class="text-xs font-bold text-secondary bg-surface-container px-2 py-0.5 rounded-md">75%</span>
+                <span class="font-headline text-2xl sm:text-3xl font-black text-primary">{{ $completedModules ?? 0 }} / {{ $totalModules ?? 0 }}</span>
+                <span class="text-xs font-bold text-secondary bg-surface-container px-2 py-0.5 rounded-md">
+                    {{ ($totalModules ?? 0) > 0 ? round(($completedModules / $totalModules) * 100) : 0 }}%
+                </span>
             </div>
-            <p class="text-xs text-on-surface-variant mt-2">2 modul lagi menuju selesai</p>
+            <p class="text-xs text-on-surface-variant mt-2">
+                {{ ($totalModules ?? 0) > 0 ? (($totalModules - ($completedModules ?? 0)) . ' modul lagi menuju selesai') : '0 modul terselesaikan' }}
+            </p>
         </div>
 
         <!-- Card 3: Sesi Mendatang -->
@@ -72,10 +82,16 @@
                 </span>
             </div>
             <div class="flex items-baseline gap-2">
-                <span class="font-headline text-2xl sm:text-3xl font-black text-primary">1</span>
-                <span class="text-xs font-bold text-secondary bg-surface-container px-2 py-0.5 rounded-md">Live Zoom</span>
+                <span class="font-headline text-2xl sm:text-3xl font-black text-primary">{{ $upcomingSessionsCount ?? 0 }}</span>
+                @if (($upcomingSessionsCount ?? 0) > 0)
+                    <span class="text-xs font-bold text-secondary bg-secondary-fixed px-2 py-0.5 rounded-md">Live Zoom</span>
+                @else
+                    <span class="text-xs font-bold text-outline bg-surface-container px-2 py-0.5 rounded-md">Jadwal</span>
+                @endif
             </div>
-            <p class="text-xs text-on-surface-variant mt-2">Besok, 19:30 WIB</p>
+            <p class="text-xs text-on-surface-variant mt-2">
+                {{ ($upcomingSessionsCount ?? 0) > 0 ? 'Sesi terdekat tersedia' : 'Belum ada jadwal sesi terdekat' }}
+            </p>
         </div>
 
     </div>
@@ -87,35 +103,88 @@
                 <h3 class="font-headline text-base sm:text-lg font-bold text-primary">Pelatihan Saya yang Sedang Berjalan</h3>
                 <p class="text-xs text-on-surface-variant mt-0.5">Lanjutkan membaca modul dan bergabung ke sesi tatap muka</p>
             </div>
+            <a href="{{ route('peserta.trainings') }}" class="inline-flex items-center gap-1.5 text-xs text-secondary font-bold hover:underline">
+                <span>Lihat Semua ({{ count($enrolledTrainings ?? []) }})</span>
+                <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+            </a>
         </div>
 
         <div class="divide-y divide-outline-variant/30">
-            <!-- Item 1 -->
-            <div class="p-5 sm:p-6 flex flex-col md:flex-row md:items-center justify-between gap-4 hover:bg-surface-container-low/40 transition-colors">
-                <div class="flex items-start gap-4">
-                    <div class="w-12 h-12 rounded-xl bg-primary text-white flex items-center justify-center font-headline font-bold shrink-0">
-                        <span class="material-symbols-outlined text-[24px]">smart_toy</span>
-                    </div>
-                    <div>
-                        <div class="flex items-center gap-2 mb-1">
-                            <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-secondary-fixed text-on-secondary-fixed">Online • 32 JP</span>
-                            <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-surface-container text-secondary">Progres 75%</span>
+            @forelse ($enrolledTrainings ?? [] as $item)
+                @php
+                    $enrollment = $item instanceof \App\Models\Enrollment ? $item : null;
+                    $training = $enrollment ? $enrollment->training : $item;
+                @endphp
+                @if($training)
+                <!-- Item Pelatihan -->
+                <div class="p-5 sm:p-6 flex flex-col md:flex-row md:items-center justify-between gap-4 hover:bg-surface-container-low/40 transition-colors">
+                    <div class="flex items-start gap-4 flex-1">
+                        @if($training->thumbnail)
+                            @php
+                                $thumbUrl = \Illuminate\Support\Str::startsWith($training->thumbnail, ['http://', 'https://'])
+                                    ? $training->thumbnail
+                                    : asset('storage/' . $training->thumbnail);
+                            @endphp
+                            <div class="w-14 h-14 rounded-xl overflow-hidden bg-surface-container-low border border-outline-variant/40 shrink-0">
+                                <img src="{{ $thumbUrl }}" alt="{{ $training->title }}" class="w-full h-full object-cover" />
+                            </div>
+                        @else
+                            <div class="w-14 h-14 rounded-xl bg-primary text-white flex items-center justify-center font-headline font-bold shrink-0">
+                                <span class="material-symbols-outlined text-[26px]">school</span>
+                            </div>
+                        @endif
+                        <div class="space-y-1 flex-1">
+                            <div class="flex flex-wrap items-center gap-2">
+                                <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-secondary-fixed text-on-secondary-fixed">
+                                    {{ $training->mode?->label() ?? 'Online' }}
+                                </span>
+                                @if($enrollment && $enrollment->status)
+                                    <span class="px-2 py-0.5 rounded text-[10px] font-bold {{ $enrollment->status->badgeClass() }}">
+                                        {{ $enrollment->status->label() }}
+                                    </span>
+                                @endif
+                                @if($training->category)
+                                    <span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-surface-container text-on-surface-variant">
+                                        {{ $training->category->name }}
+                                    </span>
+                                @endif
+                            </div>
+                            <h4 class="font-headline text-sm sm:text-base font-bold text-primary hover:text-secondary transition-colors">
+                                <a href="{{ route('peserta.trainings.show', $training->id) }}">
+                                    {{ $training->title }}
+                                </a>
+                            </h4>
+                            <p class="text-xs text-on-surface-variant line-clamp-1">
+                                {{ $training->description }}
+                            </p>
                         </div>
-                        <h4 class="font-headline text-sm sm:text-base font-bold text-primary">
-                            Penerapan Pembelajaran Berbasis AI &amp; Gamifikasi untuk Pendidik
-                        </h4>
-                        <p class="text-xs text-on-surface-variant mt-0.5">
-                            Instruktur: Dr. Hendra Wijaya, M.Pd • Sesi Berikutnya: Praktik Prompt Pedagogis
-                        </p>
+                    </div>
+                    <div class="flex items-center gap-2 self-start md:self-center shrink-0">
+                        <a href="{{ route('peserta.trainings.show', $training->id) }}" class="px-4 py-2 bg-secondary hover:bg-secondary-container text-white font-headline text-xs font-bold rounded-xl shadow-xs transition-all flex items-center gap-1.5 hover:scale-[1.02]">
+                            <span class="material-symbols-outlined text-[16px]">play_lesson</span>
+                            <span>Buka Ruang Belajar &amp; Modul</span>
+                        </a>
                     </div>
                 </div>
-                <div class="flex items-center gap-2 self-start md:self-center shrink-0">
-                    <a href="{{ url('/agenda/ai-gamifikasi-pendidik') }}" class="px-4 py-2 bg-secondary hover:bg-secondary-container text-white font-headline text-xs font-bold rounded-lg shadow-xs transition-all flex items-center gap-1.5">
-                        <span class="material-symbols-outlined text-[16px]">play_circle</span>
-                        <span>Buka Modul</span>
+                @endif
+            @empty
+                <!-- Empty State ketika belum mendaftar pelatihan -->
+                <div class="py-12 px-6 text-center flex flex-col items-center justify-center">
+                    <div class="w-16 h-16 rounded-2xl bg-surface-container-high text-outline flex items-center justify-center mb-4 shadow-xs">
+                        <span class="material-symbols-outlined text-[36px] text-on-surface-variant/70">school</span>
+                    </div>
+                    <h4 class="font-headline text-base sm:text-lg font-bold text-primary">
+                        Belum Ada Pelatihan yang Diikuti
+                    </h4>
+                    <p class="text-xs sm:text-sm text-on-surface-variant mt-1.5 max-w-md leading-relaxed">
+                        Anda baru saja mendaftar dan belum mengikuti pelatihan apapun. Silakan telusuri katalog agenda pelatihan kami untuk mulai belajar dan meningkatkan kompetensi Anda.
+                    </p>
+                    <a href="{{ route('agenda') }}" class="mt-5 inline-flex items-center gap-2 px-5 py-2.5 bg-secondary hover:bg-secondary-container text-white font-headline text-xs sm:text-sm font-bold rounded-xl shadow-xs transition-all hover:scale-[1.02] active:scale-[0.98]">
+                        <span class="material-symbols-outlined text-[18px]">search</span>
+                        <span>Jelajahi Agenda Pelatihan</span>
                     </a>
                 </div>
-            </div>
+            @endforelse
         </div>
     </div>
 

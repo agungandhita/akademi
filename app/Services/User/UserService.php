@@ -5,6 +5,7 @@ namespace App\Services\User;
 use App\DTOs\Users\CreateTentorDTO;
 use App\DTOs\Users\RegisterPesertaDTO;
 use App\DTOs\Users\UpdateUserDTO;
+use App\Enums\ParticipantType;
 use App\Enums\UserRole;
 use App\Models\User;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
@@ -14,7 +15,7 @@ use Illuminate\Support\Facades\Hash;
 
 class UserService implements UserInterface
 {
-    public function getAllPaginated(?string $search = null, ?string $role = null, int $perPage = 15): LengthAwarePaginator
+    public function getAllPaginated(?string $search = null, ?string $role = null, ?string $participantType = null, int $perPage = 15): LengthAwarePaginator
     {
         return User::query()
             ->when(! empty($search), function (Builder $query) use ($search) {
@@ -26,6 +27,9 @@ class UserService implements UserInterface
             })
             ->when(! empty($role), function (Builder $query) use ($role) {
                 $query->where('role', $role);
+            })
+            ->when(! empty($participantType), function (Builder $query) use ($participantType) {
+                $query->where('participant_type', $participantType);
             })
             ->latest()
             ->paginate($perPage)
@@ -81,6 +85,14 @@ class UserService implements UserInterface
             'expertise' => $dto->expertise,
         ];
 
+        if ($dto->role !== null) {
+            $payload['role'] = $dto->role;
+        }
+
+        if (! empty($dto->password)) {
+            $payload['password'] = Hash::make($dto->password);
+        }
+
         if ($dto->is_active !== null) {
             $payload['is_active'] = $dto->is_active;
         }
@@ -126,11 +138,25 @@ class UserService implements UserInterface
         $tentorCount = User::role(UserRole::Tentor)->count();
         $pesertaCount = User::role(UserRole::Peserta)->count();
 
+        $guruCount = User::where('participant_type', ParticipantType::Guru)->count();
+        $praktisiCount = User::where('participant_type', ParticipantType::Praktisi)->count();
+        $siswaCount = User::where('participant_type', ParticipantType::Siswa)->count();
+        $umumCount = User::where('participant_type', ParticipantType::Umum)->count();
+
         return [
             'total' => $adminCount + $tentorCount + $pesertaCount,
             'admin' => $adminCount,
             'tentor' => $tentorCount,
             'peserta' => $pesertaCount,
+            'guru' => $guruCount,
+            'praktisi' => $praktisiCount,
+            'siswa' => $siswaCount,
+            'umum' => $umumCount,
         ];
+    }
+
+    public function getRecentUsers(int $limit = 5): Collection
+    {
+        return User::latest()->take($limit)->get();
     }
 }

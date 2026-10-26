@@ -14,7 +14,7 @@ interface UserInterface
     /**
      * @return LengthAwarePaginator<User>
      */
-    public function getAllPaginated(?string $search = null, ?string $role = null, int $perPage = 15): LengthAwarePaginator;
+    public function getAllPaginated(?string $search = null, ?string $role = null, ?string $participantType = null, int $perPage = 15): LengthAwarePaginator;
 
     public function getById(int $id): User;
 
@@ -37,4 +37,9 @@ interface UserInterface
      * @return array{total: int, admin: int, tentor: int, peserta: int}
      */
     public function getUserRoleCounts(): array;
+
+    /**
+     * @return Collection<int, User>
+     */
+    public function getRecentUsers(int $limit = 5): Collection;
 }

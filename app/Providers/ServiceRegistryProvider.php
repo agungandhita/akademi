@@ -2,6 +2,10 @@
 
 namespace App\Providers;
 
+use App\Services\Enrollment\EnrollmentInterface;
+use App\Services\Enrollment\EnrollmentService;
+use App\Services\Module\ModuleInterface;
+use App\Services\Module\ModuleService;
 use App\Services\Post\PostInterface;
 use App\Services\Post\PostService;
 use App\Services\Training\TrainingInterface;
@@ -24,6 +28,8 @@ class ServiceRegistryProvider extends ServiceProvider
         TrainingCategoryInterface::class => TrainingCategoryService::class,
         TrainingInterface::class => TrainingService::class,
         PostInterface::class => PostService::class,
+        EnrollmentInterface::class => EnrollmentService::class,
+        ModuleInterface::class => ModuleService::class,
     ];
 
     /**

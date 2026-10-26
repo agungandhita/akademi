@@ -363,8 +363,8 @@
                 </div>
 
                 @if($detailThumbUrl)
-                    <div class="rounded-xl overflow-hidden border border-outline-variant/50 shadow-2xs aspect-video bg-surface-container-low group relative">
-                        <img src="{{ $detailThumbUrl }}" alt="{{ $training->title }}" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" />
+                    <div class="rounded-xl overflow-hidden border border-outline-variant/50 shadow-2xs bg-surface-container-low/60 flex items-center justify-center p-2 group relative">
+                        <img src="{{ $detailThumbUrl }}" alt="{{ $training->title }}" class="w-full h-auto max-h-[380px] object-contain rounded-lg transition-transform duration-300 group-hover:scale-[1.02]" />
                     </div>
                 @else
                     <div class="rounded-xl border-2 border-dashed border-outline-variant/70 p-6 text-center text-outline bg-surface-container-low/40">

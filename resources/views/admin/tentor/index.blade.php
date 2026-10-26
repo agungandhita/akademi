@@ -42,10 +42,16 @@
                 </span>
             </div>
             <div class="flex items-baseline gap-2">
-                <span class="font-headline text-2xl sm:text-3xl font-black text-primary">3</span>
-                <span class="text-xs font-bold text-secondary bg-secondary-fixed px-2 py-0.5 rounded-md">Aktif</span>
+                <span class="font-headline text-2xl sm:text-3xl font-black text-primary">{{ $assignedCount ?? 0 }}</span>
+                @if(($assignedCount ?? 0) > 0)
+                    <span class="text-xs font-bold text-secondary bg-secondary-fixed px-2 py-0.5 rounded-md">Aktif</span>
+                @else
+                    <span class="text-xs font-bold text-outline bg-surface-container px-2 py-0.5 rounded-md">Belum Ada</span>
+                @endif
             </div>
-            <p class="text-xs text-on-surface-variant mt-2">2 Online • 1 Blended</p>
+            <p class="text-xs text-on-surface-variant mt-2">
+                {{ ($assignedCount ?? 0) > 0 ? 'Pelatihan aktif diampu' : 'Belum ada pelatihan yang ditugaskan' }}
+            </p>
         </div>
 
         <!-- Card 2: Total Peserta Terdaftar -->
@@ -57,10 +63,12 @@
                 </span>
             </div>
             <div class="flex items-baseline gap-2">
-                <span class="font-headline text-2xl sm:text-3xl font-black text-primary">134</span>
+                <span class="font-headline text-2xl sm:text-3xl font-black text-primary">{{ $totalStudents ?? 0 }}</span>
                 <span class="text-xs font-bold text-secondary bg-surface-container px-2 py-0.5 rounded-md">Peserta</span>
             </div>
-            <p class="text-xs text-on-surface-variant mt-2">Rata-rata 45 peserta per kelas</p>
+            <p class="text-xs text-on-surface-variant mt-2">
+                {{ ($totalStudents ?? 0) > 0 ? ($totalStudents . ' peserta terdaftar') : 'Belum ada peserta terdaftar' }}
+            </p>
         </div>
 
         <!-- Card 3: Modul Terbit -->
@@ -72,7 +80,7 @@
                 </span>
             </div>
             <div class="flex items-baseline gap-2">
-                <span class="font-headline text-2xl sm:text-3xl font-black text-primary">12</span>
+                <span class="font-headline text-2xl sm:text-3xl font-black text-primary">{{ $totalModules ?? 0 }}</span>
                 <span class="text-xs font-bold text-secondary bg-surface-container px-2 py-0.5 rounded-md">Published</span>
             </div>
             <p class="text-xs text-on-surface-variant mt-2">PDF, Teks &amp; Video Pembelajaran</p>
@@ -90,7 +98,7 @@
         </div>
 
         <div class="divide-y divide-outline-variant/30">
-            <!-- Training Item 1 -->
+            @forelse($assignedTrainings ?? [] as $training)
             <div class="p-5 sm:p-6 flex flex-col md:flex-row md:items-center justify-between gap-4 hover:bg-surface-container-low/40 transition-colors">
                 <div class="flex items-start gap-4">
                     <div class="w-12 h-12 rounded-xl bg-primary text-white flex items-center justify-center font-headline font-bold shrink-0">
@@ -98,51 +106,49 @@
                     </div>
                     <div>
                         <div class="flex items-center gap-2 mb-1">
-                            <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-secondary-fixed text-on-secondary-fixed">Online • 32 JP</span>
-                            <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-surface-container text-secondary">Published</span>
+                            <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-secondary-fixed text-on-secondary-fixed">
+                                {{ $training->mode?->label() ?? 'Online' }}
+                            </span>
+                            <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-surface-container text-secondary">
+                                {{ $training->status?->label() ?? ucfirst($training->status) }}
+                            </span>
                         </div>
                         <h4 class="font-headline text-sm sm:text-base font-bold text-primary">
-                            Penerapan Pembelajaran Berbasis AI &amp; Gamifikasi untuk Pendidik
+                            {{ $training->title }}
                         </h4>
                         <p class="text-xs text-on-surface-variant mt-0.5">
-                            Sasaran: Guru &amp; Tenaga Pendidik • Kuota: 44/50 Peserta • Jadwal: 18 - 21 Mei 2025
+                            Sasaran: {{ $training->audience?->label() ?? 'Umum' }} • Kuota: {{ $training->quota ? $training->quota . ' Peserta' : 'Tanpa Batas' }}
                         </p>
                     </div>
                 </div>
                 <div class="flex items-center gap-2 self-start md:self-center shrink-0">
-                    <button class="px-4 py-2 bg-secondary hover:bg-secondary-container text-white font-headline text-xs font-bold rounded-lg shadow-xs transition-all flex items-center gap-1.5 cursor-pointer">
+                    <a href="{{ route('tentor.modules.index', ['training_id' => $training->id]) }}" class="px-3.5 py-2 bg-secondary hover:bg-secondary-container text-white font-headline text-xs font-bold rounded-lg shadow-xs transition-all flex items-center gap-1.5">
                         <span class="material-symbols-outlined text-[16px]">menu_book</span>
-                        <span>Kelola Modul (4)</span>
-                    </button>
+                        <span>Kelola Modul ({{ $training->modules_count ?? $training->modules?->count() ?? 0 }})</span>
+                    </a>
+                    <a href="{{ route('tentor.trainings.participants', $training->id) }}" class="px-3.5 py-2 bg-primary hover:bg-primary-container text-white font-headline text-xs font-bold rounded-lg shadow-xs transition-all flex items-center gap-1.5">
+                        <span class="material-symbols-outlined text-[16px]">group</span>
+                        <span>Lihat Peserta ({{ $training->active_enrollments_count ?? $training->enrollments_count ?? 0 }})</span>
+                    </a>
+                    <a href="{{ url('/agenda/' . $training->slug) }}" target="_blank" class="px-3 py-2 border border-outline-variant/60 hover:bg-surface-container text-on-surface-variant font-headline text-xs font-semibold rounded-lg transition-all flex items-center gap-1.5">
+                        <span class="material-symbols-outlined text-[16px]">visibility</span>
+                        <span>Web</span>
+                    </a>
                 </div>
             </div>
-
-            <!-- Training Item 2 -->
-            <div class="p-5 sm:p-6 flex flex-col md:flex-row md:items-center justify-between gap-4 hover:bg-surface-container-low/40 transition-colors">
-                <div class="flex items-start gap-4">
-                    <div class="w-12 h-12 rounded-xl bg-secondary text-white flex items-center justify-center font-headline font-bold shrink-0">
-                        <span class="material-symbols-outlined text-[24px]">assignment_turned_in</span>
-                    </div>
-                    <div>
-                        <div class="flex items-center gap-2 mb-1">
-                            <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-secondary-fixed text-on-secondary-fixed">Blended • 32 JP</span>
-                            <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-surface-container text-secondary">Published</span>
-                        </div>
-                        <h4 class="font-headline text-sm sm:text-base font-bold text-primary">
-                            Konstruksi Instrumen Asesmen Formatif Digital Terstandarisasi
-                        </h4>
-                        <p class="text-xs text-on-surface-variant mt-0.5">
-                            Sasaran: Guru &amp; Dosen • Kuota: 46/50 Peserta • Jadwal: 25 - 28 Mei 2025
-                        </p>
-                    </div>
+            @empty
+            <div class="py-12 px-6 text-center flex flex-col items-center justify-center">
+                <div class="w-16 h-16 rounded-2xl bg-surface-container-high text-outline flex items-center justify-center mb-4 shadow-xs">
+                    <span class="material-symbols-outlined text-[36px] text-on-surface-variant/70">co_present</span>
                 </div>
-                <div class="flex items-center gap-2 self-start md:self-center shrink-0">
-                    <button class="px-4 py-2 bg-secondary hover:bg-secondary-container text-white font-headline text-xs font-bold rounded-lg shadow-xs transition-all flex items-center gap-1.5 cursor-pointer">
-                        <span class="material-symbols-outlined text-[16px]">menu_book</span>
-                        <span>Kelola Modul (5)</span>
-                    </button>
-                </div>
+                <h4 class="font-headline text-base sm:text-lg font-bold text-primary">
+                    Belum Ada Pelatihan Ditugaskan
+                </h4>
+                <p class="text-xs sm:text-sm text-on-surface-variant mt-1.5 max-w-md leading-relaxed">
+                    Saat ini Administrator belum menugaskan Anda ke program pelatihan manapun. Informasi penugasan kelas baru akan muncul di sini secara otomatis.
+                </p>
             </div>
+            @endforelse
         </div>
     </div>
 

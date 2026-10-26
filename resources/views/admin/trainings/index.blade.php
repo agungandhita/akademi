@@ -158,6 +158,13 @@
                         </td>
                         <td class="py-3.5 px-4 sm:px-6 text-right">
                             <div class="flex items-center justify-end gap-1.5">
+                                <!-- Daftar Peserta (ADM-08) -->
+                                <a href="{{ route('admin.trainings.participants', $training->id) }}" 
+                                   class="p-1.5 rounded-lg border border-outline-variant/60 hover:bg-primary hover:text-white text-primary transition-colors cursor-pointer" 
+                                   title="Lihat Daftar Peserta">
+                                    <span class="material-symbols-outlined text-[16px]">group</span>
+                                </a>
+
                                 <!-- Detail / Sesi / Penugasan -->
                                 <a href="{{ route('admin.trainings.show', $training->id) }}" 
                                    class="p-1.5 rounded-lg border border-outline-variant/60 hover:bg-secondary hover:text-white text-secondary transition-colors cursor-pointer" 

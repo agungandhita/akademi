@@ -4,11 +4,14 @@ namespace App\Services\Training;
 
 use App\DTOs\Trainings\CreateTrainingDTO;
 use App\DTOs\Trainings\UpdateTrainingDTO;
+use App\Enums\EnrollmentStatus;
 use App\Enums\SessionType;
+use App\Enums\TrainingMode;
 use App\Enums\TrainingStatus;
 use App\Models\Training;
 use App\Models\TrainingSession;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Str;
 
 class TrainingService implements TrainingInterface
@@ -17,7 +20,13 @@ class TrainingService implements TrainingInterface
     {
         return Training::filter($filters)
             ->with(['category', 'creator'])
-            ->withCount(['instructors', 'sessions'])
+            ->withCount([
+                'instructors',
+                'sessions',
+                'enrollments as active_enrollments_count' => function ($query) {
+                    $query->where('status', '!=', EnrollmentStatus::Cancelled->value);
+                },
+            ])
             ->latest()
             ->paginate($perPage)
             ->withQueryString();
@@ -25,12 +34,19 @@ class TrainingService implements TrainingInterface
 
     public function getById(int $id): Training
     {
-        return Training::with(['category', 'creator', 'instructors', 'sessions'])->findOrFail($id);
+        return Training::with(['category', 'creator', 'instructors', 'sessions', 'modules' => fn ($query) => $query->ordered()])
+            ->withCount(['enrollments as active_enrollments_count' => function ($query) {
+                $query->where('status', '!=', EnrollmentStatus::Cancelled->value);
+            }])
+            ->findOrFail($id);
     }
 
     public function getBySlug(string $slug): Training
     {
-        return Training::with(['category', 'creator', 'instructors', 'sessions'])
+        return Training::with(['category', 'creator', 'instructors', 'sessions', 'modules' => fn ($query) => $query->published()->ordered()])
+            ->withCount(['enrollments as active_enrollments_count' => function ($query) {
+                $query->where('status', '!=', EnrollmentStatus::Cancelled->value);
+            }])
             ->where('slug', $slug)
             ->firstOrFail();
     }
@@ -143,5 +159,38 @@ class TrainingService implements TrainingInterface
             'closed' => $closed,
             'archived' => $archived,
         ];
+    }
+
+    public function getTrainingModeCounts(): array
+    {
+        return [
+            'online' => Training::where('mode', TrainingMode::Online->value)->count(),
+            'offline' => Training::where('mode', TrainingMode::Offline->value)->count(),
+            'blended' => Training::where('mode', TrainingMode::Blended->value)->count(),
+        ];
+    }
+
+    public function getRecentTrainings(int $limit = 5): Collection
+    {
+        return Training::with(['category', 'instructors'])
+            ->latest()
+            ->take($limit)
+            ->get();
+    }
+
+    public function getByInstructor(int $instructorId): Collection
+    {
+        return Training::whereHas('instructors', function ($query) use ($instructorId) {
+            $query->where('users.id', $instructorId);
+        })
+        ->with(['category', 'sessions', 'modules'])
+        ->withCount([
+            'enrollments as active_enrollments_count' => function ($query) {
+                $query->where('status', '!=', EnrollmentStatus::Cancelled->value);
+            },
+            'modules',
+        ])
+        ->latest()
+        ->get();
     }
 }

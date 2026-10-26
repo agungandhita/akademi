@@ -22,6 +22,7 @@ class UserController extends Controller
         $users = $this->userService->getAllPaginated(
             search: $request->query('search'),
             role: $request->query('role'),
+            participantType: $request->query('participant_type'),
             perPage: 15
         );
 

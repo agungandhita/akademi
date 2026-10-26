@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\EnrollmentStatus;
 use App\Enums\TrainingAudience;
 use App\Enums\TrainingMode;
 use App\Enums\TrainingStatus;
@@ -120,6 +121,122 @@ class Training extends Model
         return $this->hasMany(TrainingSession::class, 'training_id')
             ->orderBy('session_date')
             ->orderBy('start_time');
+    }
+
+    /**
+     * Relasi ke seluruh pendaftaran pelatihan.
+     *
+     * @return HasMany<Enrollment, $this>
+     */
+    public function enrollments(): HasMany
+    {
+        return $this->hasMany(Enrollment::class, 'training_id');
+    }
+
+    /**
+     * Relasi ke modul pembelajaran pelatihan.
+     *
+     * @return HasMany<Module, $this>
+     */
+    public function modules(): HasMany
+    {
+        return $this->hasMany(Module::class, 'training_id')->ordered();
+    }
+
+    /**
+     * Relasi ke peserta yang terdaftar di pelatihan.
+     *
+     * @return BelongsToMany<User, $this>
+     */
+    public function participants(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'enrollments', 'training_id', 'user_id')
+            ->withPivot(['id', 'status', 'enrolled_at', 'cancelled_at', 'completed_at'])
+            ->withTimestamps();
+    }
+
+    /**
+     * Hitung jumlah peserta aktif terdaftar secara realtime.
+     */
+    public function getEnrolledCountAttribute(): int
+    {
+        if (array_key_exists('active_enrollments_count', $this->attributes)) {
+            return (int) $this->attributes['active_enrollments_count'];
+        }
+
+        if (array_key_exists('enrollments_count', $this->attributes)) {
+            return (int) $this->attributes['enrollments_count'];
+        }
+
+        if ($this->relationLoaded('enrollments')) {
+            return $this->enrollments->where('status', '!=', EnrollmentStatus::Cancelled)->count();
+        }
+
+        return $this->enrollments()->where('status', '!=', EnrollmentStatus::Cancelled->value)->count();
+    }
+
+    /**
+     * Hitung sisa kuota yang tersedia (null jika tanpa batas kuota).
+     */
+    public function getRemainingQuotaAttribute(): ?int
+    {
+        if ($this->quota === null) {
+            return null;
+        }
+
+        return max(0, $this->quota - $this->enrolled_count);
+    }
+
+    /**
+     * Cek apakah kuota pendaftaran sudah penuh.
+     */
+    public function getIsQuotaFullAttribute(): bool
+    {
+        if ($this->quota === null) {
+            return false;
+        }
+
+        return $this->remaining_quota <= 0;
+    }
+
+    /**
+     * Cek apakah waktu pendaftaran sudah berakhir/habis.
+     */
+    public function getIsRegistrationEndedAttribute(): bool
+    {
+        return (bool) ($this->registration_end && $this->registration_end->endOfDay()->isPast());
+    }
+
+    /**
+     * Cek apakah waktu pendaftaran belum dibuka.
+     */
+    public function getIsRegistrationNotStartedAttribute(): bool
+    {
+        return (bool) ($this->registration_start && $this->registration_start->startOfDay()->isFuture());
+    }
+
+    /**
+     * Cek apakah pendaftaran pelatihan saat ini aktif dan dapat dilakukan.
+     */
+    public function getIsRegistrationOpenAttribute(): bool
+    {
+        if ($this->status !== TrainingStatus::Published) {
+            return false;
+        }
+
+        if ($this->is_registration_ended) {
+            return false;
+        }
+
+        if ($this->is_registration_not_started) {
+            return false;
+        }
+
+        if ($this->is_quota_full) {
+            return false;
+        }
+
+        return true;
     }
 
     /**

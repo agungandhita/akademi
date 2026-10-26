@@ -39,6 +39,27 @@ test('peserta baru dapat mendaftar dan akun tersimpan di database (AUTH-01)', fu
     expect($user->institution)->toBe('SMAN 1 Yogyakarta');
 });
 
+test('peserta baru dapat mendaftar dengan kategori profesional & praktisi', function () {
+    $response = $this->post('/register', [
+        'name' => 'Agung Praktisi',
+        'email' => 'agung.praktisi@example.com',
+        'password' => 'password123',
+        'password_confirmation' => 'password123',
+        'participant_type' => 'Profesional & Praktisi',
+        'institution' => 'PT Solusi Teknologi',
+        'phone' => '081298765432',
+    ]);
+
+    $response->assertRedirect('/login');
+
+    $user = User::where('email', 'agung.praktisi@example.com')->first();
+
+    expect($user)->not->toBeNull();
+    expect($user->role)->toBe(UserRole::Peserta);
+    expect($user->participant_type)->toBe(ParticipantType::Praktisi);
+    expect($user->participant_type->label())->toBe('Profesional & Praktisi');
+});
+
 test('peserta yang baru mendaftar dapat login dengan kredensialnya', function () {
     $this->post('/register', [
         'name' => 'Siti Nurhaliza',
@@ -81,4 +102,21 @@ test('pendaftaran dengan password konfirmasi tidak cocok ditolak', function () {
     ]);
 
     $response->assertSessionHasErrors('password');
+});
+
+test('peserta yang baru mendaftar melihat 0 pelatihan dan status kosong di dashboard peserta', function () {
+    $peserta = User::create([
+        'name' => 'Peserta Baru',
+        'email' => 'pesertabaru@example.com',
+        'password' => bcrypt('password123'),
+        'role' => UserRole::Peserta,
+        'participant_type' => ParticipantType::Umum,
+        'is_active' => true,
+    ]);
+
+    $this->actingAs($peserta)
+        ->get('/peserta')
+        ->assertOk()
+        ->assertSee('Belum Ada Pelatihan yang Diikuti')
+        ->assertSee('Jelajahi Agenda Pelatihan');
 });

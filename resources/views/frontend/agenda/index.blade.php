@@ -178,9 +178,10 @@
                             $thumbUrl = 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=800&q=80';
                         }
                         
-                        $isClosed = $training->registration_end && now()->gt($training->registration_end);
-                        $isSoon = $training->registration_start && now()->lt($training->registration_start);
-                        $statusFilter = $isClosed ? 'closed' : ($isSoon ? 'soon' : 'open');
+                        $isClosed = $training->is_registration_ended;
+                        $isQuotaFull = $training->is_quota_full;
+                        $isSoon = $training->is_registration_not_started;
+                        $statusFilter = ($isClosed || $isQuotaFull) ? 'closed' : ($isSoon ? 'soon' : 'open');
                         
                         $audienceCategory = match($training->audience) {
                             \App\Enums\TrainingAudience::Guru => 'guru',
@@ -221,9 +222,15 @@
                                     {{ $training->start_date->format('d M Y') }}
                                 </span>
                                 @if($training->quota)
-                                    <span class="text-[11px] bg-tertiary-fixed text-on-tertiary-fixed px-2 py-0.5 rounded font-bold">
-                                        Kuota: {{ $training->quota }} Peserta
-                                    </span>
+                                    @if($training->remaining_quota > 0)
+                                        <span class="text-[11px] bg-tertiary-fixed text-on-tertiary-fixed px-2 py-0.5 rounded font-bold">
+                                            Sisa: {{ $training->remaining_quota }} Kursi
+                                        </span>
+                                    @else
+                                        <span class="text-[11px] bg-error-container text-error px-2 py-0.5 rounded font-bold">
+                                            Kuota Penuh
+                                        </span>
+                                    @endif
                                 @else
                                     <span class="text-[11px] bg-secondary-fixed text-on-secondary-fixed px-2 py-0.5 rounded font-bold">
                                         Terbuka Luas
@@ -259,11 +266,14 @@
                             <div class="pt-4 border-t border-outline-variant/50 flex items-center justify-between">
                                 <div class="flex items-center gap-1.5">
                                     @if($isClosed)
+                                        <span class="w-2 h-2 rounded-full bg-outline"></span>
+                                        <span class="text-xs font-bold text-outline">Pendaftaran Ditutup</span>
+                                    @elseif($isQuotaFull)
                                         <span class="w-2 h-2 rounded-full bg-error"></span>
-                                        <span class="text-xs font-bold text-error">Pendaftaran Ditutup</span>
+                                        <span class="text-xs font-bold text-error">Kuota Penuh</span>
                                     @elseif($isSoon)
                                         <span class="w-2 h-2 rounded-full bg-amber-500"></span>
-                                        <span class="text-xs font-bold text-amber-600">Segera Dibuka</span>
+                                        <span class="text-xs font-bold text-amber-600">Belum Dibuka</span>
                                     @else
                                         <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
                                         <span class="text-xs font-bold text-emerald-700">Pendaftaran Dibuka</span>
@@ -274,11 +284,13 @@
                                        href="{{ route('agenda.detail', $training->slug) }}">
                                         Detail
                                     </a>
-                                    <a class="px-3.5 py-1.5 rounded-lg bg-secondary text-white font-headline text-xs font-bold hover:bg-secondary-container transition-all flex items-center gap-1 shadow-xs" 
-                                       href="{{ route('register') }}">
-                                        <span>Daftar</span>
-                                        <span class="material-symbols-outlined text-[14px]">arrow_forward</span>
-                                    </a>
+                                    @if(! $isClosed && ! $isQuotaFull && ! $isSoon)
+                                        <a class="px-3.5 py-1.5 rounded-lg bg-secondary text-white font-headline text-xs font-bold hover:bg-secondary-container transition-all flex items-center gap-1 shadow-xs" 
+                                           href="{{ route('agenda.detail', $training->slug) }}">
+                                            <span>Daftar</span>
+                                            <span class="material-symbols-outlined text-[14px]">arrow_forward</span>
+                                        </a>
+                                    @endif
                                 </div>
                             </div>
                         </div>

@@ -105,6 +105,34 @@
                     @enderror
                 </div>
 
+                <!-- Role Selection -->
+                <div>
+                    <label for="role" class="block font-headline text-xs font-bold text-primary mb-1.5">
+                        Peran Sistem (Role) <span class="text-error">*</span>
+                    </label>
+                    <select id="role" name="role" required
+                        class="w-full px-3.5 py-2.5 rounded-xl bg-surface-container-low border border-outline-variant/60 text-xs sm:text-sm text-on-surface focus:bg-white focus:ring-2 focus:ring-secondary/40 outline-none">
+                        <option value="peserta" {{ old('role', $user->role?->value) === 'peserta' ? 'selected' : '' }}>Peserta Pelatihan (Mendaftar Mandiri)</option>
+                        <option value="tentor" {{ old('role', $user->role?->value) === 'tentor' ? 'selected' : '' }}>Tentor / Instruktur (Didaftarkan Admin)</option>
+                        <option value="admin" {{ old('role', $user->role?->value) === 'admin' ? 'selected' : '' }}>Administrator Platform</option>
+                    </select>
+                    @error('role')
+                        <p class="text-xs text-error mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <!-- Password (Optional) -->
+                <div>
+                    <label for="password" class="block font-headline text-xs font-bold text-primary mb-1.5">
+                        Ubah Kata Sandi <span class="text-outline font-normal">(Kosongkan jika tidak ingin diubah)</span>
+                    </label>
+                    <input type="password" id="password" name="password" placeholder="Minimal 8 karakter baru"
+                        class="w-full px-3.5 py-2.5 rounded-xl bg-surface-container-low border border-outline-variant/60 text-xs sm:text-sm text-on-surface focus:bg-white focus:ring-2 focus:ring-secondary/40 outline-none" />
+                    @error('password')
+                        <p class="text-xs text-error mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
+
                 <!-- Phone -->
                 <div>
                     <label for="phone" class="block font-headline text-xs font-bold text-primary mb-1.5">
@@ -129,30 +157,34 @@
                     @enderror
                 </div>
 
+                <!-- Participant Type (For Peserta) -->
+                <div>
+                    <label for="participant_type" class="block font-headline text-xs font-bold text-primary mb-1.5">
+                        Kategori Peserta (Khusus Peserta Mandiri)
+                    </label>
+                    <select id="participant_type" name="participant_type" 
+                        class="w-full px-3.5 py-2.5 rounded-xl bg-surface-container-low border border-outline-variant/60 text-xs sm:text-sm text-on-surface focus:bg-white focus:ring-2 focus:ring-secondary/40 outline-none">
+                        <option value="">— Tidak Ditetapkan / Bukan Peserta —</option>
+                        <option value="guru" {{ old('participant_type', $user->participant_type?->value) === 'guru' ? 'selected' : '' }}>Guru &amp; Tenaga Pendidik</option>
+                        <option value="praktisi" {{ old('participant_type', $user->participant_type?->value) === 'praktisi' ? 'selected' : '' }}>Profesional &amp; Praktisi</option>
+                        <option value="siswa" {{ old('participant_type', $user->participant_type?->value) === 'siswa' ? 'selected' : '' }}>Siswa / Mahasiswa</option>
+                        <option value="umum" {{ old('participant_type', $user->participant_type?->value) === 'umum' ? 'selected' : '' }}>Masyarakat Umum / Vokasi</option>
+                    </select>
+                    @error('participant_type')
+                        <p class="text-xs text-error mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
+
                 <!-- Expertise (For Tentor/Instruktur) -->
                 <div>
                     <label for="expertise" class="block font-headline text-xs font-bold text-primary mb-1.5">
-                        Bidang Keahlian / Kompetensi
+                        Bidang Keahlian / Kompetensi (Tentor)
                     </label>
                     <input type="text" id="expertise" name="expertise" value="{{ old('expertise', $user->expertise) }}" placeholder="Contoh: Pedagogi Digital, Web Dev, dll"
                         class="w-full px-3.5 py-2.5 rounded-xl bg-surface-container-low border border-outline-variant/60 text-xs sm:text-sm text-on-surface focus:bg-white focus:ring-2 focus:ring-secondary/40 outline-none" />
                     @error('expertise')
                         <p class="text-xs text-error mt-1">{{ $message }}</p>
                     @enderror
-                </div>
-
-                <!-- Participant Type (if role peserta) -->
-                <div>
-                    <label for="participant_type" class="block font-headline text-xs font-bold text-primary mb-1.5">
-                        Tipe Peserta Pelatihan
-                    </label>
-                    <select id="participant_type" name="participant_type" 
-                        class="w-full px-3.5 py-2.5 rounded-xl bg-surface-container-low border border-outline-variant/60 text-xs sm:text-sm text-on-surface focus:bg-white focus:ring-2 focus:ring-secondary/40 outline-none">
-                        <option value="">— Tidak Ditetapkan —</option>
-                        <option value="guru" {{ old('participant_type', $user->participant_type?->value) === 'guru' ? 'selected' : '' }}>Guru &amp; Tenaga Pendidik</option>
-                        <option value="siswa" {{ old('participant_type', $user->participant_type?->value) === 'siswa' ? 'selected' : '' }}>Siswa / Mahasiswa</option>
-                        <option value="umum" {{ old('participant_type', $user->participant_type?->value) === 'umum' ? 'selected' : '' }}>Masyarakat Umum / Vokasi</option>
-                    </select>
                 </div>
             </div>
 

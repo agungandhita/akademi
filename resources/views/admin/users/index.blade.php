@@ -27,44 +27,90 @@
         </div>
     </div>
 
-    <!-- Quick Role Filter Pills (Instant Stats Navigation) -->
+    <!-- Quick Role & Category Filter Pills (Instant Stats Navigation) -->
     @if(isset($roleCounts))
-    <div class="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
-        <a href="{{ route('admin.users.index', array_filter(['search' => request('search')])) }}" 
-           class="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold transition-all whitespace-nowrap {{ !request('role') ? 'bg-primary text-white shadow-xs' : 'bg-surface-container-lowest text-on-surface-variant hover:bg-surface-container-low border border-outline-variant/60' }}">
-            <span class="material-symbols-outlined text-[16px]">group</span>
-            <span>Semua Pengguna</span>
-            <span class="text-[10px] font-bold px-1.5 py-0.5 rounded-md {{ !request('role') ? 'bg-white/20 text-white' : 'bg-surface-container-high text-primary' }}">
-                {{ $roleCounts['total'] }}
-            </span>
-        </a>
+    <div class="space-y-2">
+        <!-- Row 1: Peran Utama -->
+        <div class="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
+            <span class="text-[11px] font-bold text-outline uppercase tracking-wider shrink-0 mr-1">Peran:</span>
+            
+            <a href="{{ route('admin.users.index', array_filter(['search' => request('search')])) }}" 
+               class="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold transition-all whitespace-nowrap {{ !request('role') && !request('participant_type') ? 'bg-primary text-white shadow-xs' : 'bg-surface-container-lowest text-on-surface-variant hover:bg-surface-container-low border border-outline-variant/60' }}">
+                <span class="material-symbols-outlined text-[16px]">group</span>
+                <span>Semua Pengguna</span>
+                <span class="text-[10px] font-bold px-1.5 py-0.5 rounded-md {{ !request('role') && !request('participant_type') ? 'bg-white/20 text-white' : 'bg-surface-container-high text-primary' }}">
+                    {{ $roleCounts['total'] }}
+                </span>
+            </a>
 
-        <a href="{{ route('admin.users.index', array_filter(['role' => 'admin', 'search' => request('search')])) }}" 
-           class="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold transition-all whitespace-nowrap {{ request('role') === 'admin' ? 'bg-primary text-white shadow-xs' : 'bg-surface-container-lowest text-on-surface-variant hover:bg-surface-container-low border border-outline-variant/60' }}">
-            <span class="material-symbols-outlined text-[16px]">admin_panel_settings</span>
-            <span>Administrator</span>
-            <span class="text-[10px] font-bold px-1.5 py-0.5 rounded-md {{ request('role') === 'admin' ? 'bg-white/20 text-white' : 'bg-surface-container-high text-primary' }}">
-                {{ $roleCounts['admin'] }}
-            </span>
-        </a>
+            <a href="{{ route('admin.users.index', array_filter(['role' => 'admin', 'search' => request('search')])) }}" 
+               class="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold transition-all whitespace-nowrap {{ request('role') === 'admin' ? 'bg-primary text-white shadow-xs' : 'bg-surface-container-lowest text-on-surface-variant hover:bg-surface-container-low border border-outline-variant/60' }}">
+                <span class="material-symbols-outlined text-[16px]">admin_panel_settings</span>
+                <span>Administrator</span>
+                <span class="text-[10px] font-bold px-1.5 py-0.5 rounded-md {{ request('role') === 'admin' ? 'bg-white/20 text-white' : 'bg-surface-container-high text-primary' }}">
+                    {{ $roleCounts['admin'] }}
+                </span>
+            </a>
 
-        <a href="{{ route('admin.users.index', array_filter(['role' => 'tentor', 'search' => request('search')])) }}" 
-           class="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold transition-all whitespace-nowrap {{ request('role') === 'tentor' ? 'bg-secondary text-white shadow-xs' : 'bg-surface-container-lowest text-on-surface-variant hover:bg-surface-container-low border border-outline-variant/60' }}">
-            <span class="material-symbols-outlined text-[16px]">co_present</span>
-            <span>Tentor / Instruktur</span>
-            <span class="text-[10px] font-bold px-1.5 py-0.5 rounded-md {{ request('role') === 'tentor' ? 'bg-white/20 text-white' : 'bg-surface-container-high text-primary' }}">
-                {{ $roleCounts['tentor'] }}
-            </span>
-        </a>
+            <a href="{{ route('admin.users.index', array_filter(['role' => 'tentor', 'search' => request('search')])) }}" 
+               class="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold transition-all whitespace-nowrap {{ request('role') === 'tentor' ? 'bg-secondary text-white shadow-xs' : 'bg-surface-container-lowest text-on-surface-variant hover:bg-surface-container-low border border-outline-variant/60' }}">
+                <span class="material-symbols-outlined text-[16px]">co_present</span>
+                <span>Tentor / Instruktur</span>
+                <span class="text-[10px] font-bold px-1.5 py-0.5 rounded-md {{ request('role') === 'tentor' ? 'bg-white/20 text-white' : 'bg-surface-container-high text-primary' }}">
+                    {{ $roleCounts['tentor'] }}
+                </span>
+            </a>
 
-        <a href="{{ route('admin.users.index', array_filter(['role' => 'peserta', 'search' => request('search')])) }}" 
-           class="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold transition-all whitespace-nowrap {{ request('role') === 'peserta' ? 'bg-secondary text-white shadow-xs' : 'bg-surface-container-lowest text-on-surface-variant hover:bg-surface-container-low border border-outline-variant/60' }}">
-            <span class="material-symbols-outlined text-[16px]">school</span>
-            <span>Peserta Pelatihan</span>
-            <span class="text-[10px] font-bold px-1.5 py-0.5 rounded-md {{ request('role') === 'peserta' ? 'bg-white/20 text-white' : 'bg-surface-container-high text-primary' }}">
-                {{ $roleCounts['peserta'] }}
-            </span>
-        </a>
+            <a href="{{ route('admin.users.index', array_filter(['role' => 'peserta', 'search' => request('search')])) }}" 
+               class="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold transition-all whitespace-nowrap {{ request('role') === 'peserta' && !request('participant_type') ? 'bg-secondary text-white shadow-xs' : 'bg-surface-container-lowest text-on-surface-variant hover:bg-surface-container-low border border-outline-variant/60' }}">
+                <span class="material-symbols-outlined text-[16px]">school</span>
+                <span>Semua Peserta</span>
+                <span class="text-[10px] font-bold px-1.5 py-0.5 rounded-md {{ request('role') === 'peserta' && !request('participant_type') ? 'bg-white/20 text-white' : 'bg-surface-container-high text-primary' }}">
+                    {{ $roleCounts['peserta'] }}
+                </span>
+            </a>
+        </div>
+
+        <!-- Row 2: Kategori Peserta Mandiri -->
+        <div class="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
+            <span class="text-[11px] font-bold text-outline uppercase tracking-wider shrink-0 mr-1">Kategori:</span>
+
+            <a href="{{ route('admin.users.index', array_filter(['participant_type' => 'guru', 'search' => request('search')])) }}" 
+               class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all whitespace-nowrap {{ request('participant_type') === 'guru' ? 'bg-primary text-white shadow-xs' : 'bg-surface-container-lowest text-on-surface-variant hover:bg-surface-container-low border border-outline-variant/60' }}">
+                <span class="material-symbols-outlined text-[15px]">badge</span>
+                <span>Guru &amp; Pendidik</span>
+                <span class="text-[10px] font-bold px-1.5 py-0.2 rounded-md {{ request('participant_type') === 'guru' ? 'bg-white/20 text-white' : 'bg-surface-container-high text-primary' }}">
+                    {{ $roleCounts['guru'] ?? 0 }}
+                </span>
+            </a>
+
+            <a href="{{ route('admin.users.index', array_filter(['participant_type' => 'praktisi', 'search' => request('search')])) }}" 
+               class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all whitespace-nowrap {{ request('participant_type') === 'praktisi' ? 'bg-primary text-white shadow-xs' : 'bg-surface-container-lowest text-on-surface-variant hover:bg-surface-container-low border border-outline-variant/60' }}">
+                <span class="material-symbols-outlined text-[15px]">business_center</span>
+                <span>Profesional &amp; Praktisi</span>
+                <span class="text-[10px] font-bold px-1.5 py-0.2 rounded-md {{ request('participant_type') === 'praktisi' ? 'bg-white/20 text-white' : 'bg-surface-container-high text-primary' }}">
+                    {{ $roleCounts['praktisi'] ?? 0 }}
+                </span>
+            </a>
+
+            <a href="{{ route('admin.users.index', array_filter(['participant_type' => 'siswa', 'search' => request('search')])) }}" 
+               class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all whitespace-nowrap {{ request('participant_type') === 'siswa' ? 'bg-primary text-white shadow-xs' : 'bg-surface-container-lowest text-on-surface-variant hover:bg-surface-container-low border border-outline-variant/60' }}">
+                <span class="material-symbols-outlined text-[15px]">backpack</span>
+                <span>Siswa &amp; Mahasiswa</span>
+                <span class="text-[10px] font-bold px-1.5 py-0.2 rounded-md {{ request('participant_type') === 'siswa' ? 'bg-white/20 text-white' : 'bg-surface-container-high text-primary' }}">
+                    {{ $roleCounts['siswa'] ?? 0 }}
+                </span>
+            </a>
+
+            <a href="{{ route('admin.users.index', array_filter(['participant_type' => 'umum', 'search' => request('search')])) }}" 
+               class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all whitespace-nowrap {{ request('participant_type') === 'umum' ? 'bg-primary text-white shadow-xs' : 'bg-surface-container-lowest text-on-surface-variant hover:bg-surface-container-low border border-outline-variant/60' }}">
+                <span class="material-symbols-outlined text-[15px]">person</span>
+                <span>Masyarakat Umum</span>
+                <span class="text-[10px] font-bold px-1.5 py-0.2 rounded-md {{ request('participant_type') === 'umum' ? 'bg-white/20 text-white' : 'bg-surface-container-high text-primary' }}">
+                    {{ $roleCounts['umum'] ?? 0 }}
+                </span>
+            </a>
+        </div>
     </div>
     @endif
 
@@ -77,7 +123,7 @@
                 <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari nama, email, institusi..." 
                     class="w-full h-10 pl-10 pr-4 text-xs sm:text-sm text-on-surface bg-surface-container-low border border-outline-variant/60 rounded-xl focus:bg-white focus:ring-2 focus:ring-secondary/40 outline-none transition-all placeholder:text-outline" />
                 @if(request('search'))
-                    <a href="{{ route('admin.users.index', array_filter(['role' => request('role')])) }}" 
+                    <a href="{{ route('admin.users.index', array_filter(['role' => request('role'), 'participant_type' => request('participant_type')])) }}" 
                        class="absolute right-3 top-2.5 text-outline hover:text-primary transition-colors" title="Hapus kata kunci pencarian">
                         <span class="material-symbols-outlined text-[18px]">close</span>
                     </a>
@@ -94,6 +140,17 @@
                 </select>
             </div>
 
+            <!-- Participant Type Dropdown Selector -->
+            <div class="w-full sm:w-auto">
+                <select name="participant_type" onchange="this.form.submit()" class="w-full sm:w-auto h-10 px-3.5 py-2 text-xs sm:text-sm text-on-surface bg-surface-container-low border border-outline-variant/60 rounded-xl focus:bg-white outline-none cursor-pointer">
+                    <option value="">Semua Kategori Peserta</option>
+                    <option value="guru" {{ request('participant_type') === 'guru' ? 'selected' : '' }}>Guru &amp; Pendidik</option>
+                    <option value="praktisi" {{ request('participant_type') === 'praktisi' ? 'selected' : '' }}>Profesional &amp; Praktisi</option>
+                    <option value="siswa" {{ request('participant_type') === 'siswa' ? 'selected' : '' }}>Siswa / Mahasiswa</option>
+                    <option value="umum" {{ request('participant_type') === 'umum' ? 'selected' : '' }}>Masyarakat Umum</option>
+                </select>
+            </div>
+
             <!-- Filter & Reset Buttons -->
             <div class="flex items-center gap-2 w-full sm:w-auto">
                 <button type="submit" class="h-10 px-4 bg-primary hover:bg-primary-container text-white font-headline text-xs font-bold rounded-xl transition-all shadow-2xs flex items-center justify-center gap-1.5 flex-1 sm:flex-initial">
@@ -101,7 +158,7 @@
                     <span>Filter</span>
                 </button>
 
-                @if(request()->hasAny(['search', 'role']))
+                @if(request()->hasAny(['search', 'role', 'participant_type']))
                     <a href="{{ route('admin.users.index') }}" 
                        class="h-10 px-3.5 border border-outline-variant/60 hover:bg-surface-container text-xs font-semibold text-on-surface-variant rounded-xl transition-colors flex items-center gap-1"
                        title="Reset seluruh filter">
@@ -171,6 +228,17 @@
                                 <span class="material-symbols-outlined text-[15px]">{{ $user->role?->icon() ?? 'person' }}</span>
                                 <span>{{ $user->role?->label() ?? ucfirst($user->role) }}</span>
                             </span>
+                            @if($user->role?->value === 'tentor')
+                                <div class="text-[10px] text-outline font-medium mt-1 flex items-center gap-1">
+                                    <span class="material-symbols-outlined text-[12px] text-secondary">verified</span>
+                                    <span>Didaftarkan Admin</span>
+                                </div>
+                            @elseif($user->role?->value === 'peserta')
+                                <div class="text-[10px] text-outline font-medium mt-1 flex items-center gap-1">
+                                    <span class="material-symbols-outlined text-[12px] text-primary">person_add</span>
+                                    <span>Pendaftaran Mandiri</span>
+                                </div>
+                            @endif
                         </td>
 
                         <!-- Institution / Participant Type -->
@@ -179,13 +247,14 @@
                                 {{ $user->institution ?: '—' }}
                             </div>
                             @if($user->participant_type)
-                                <div class="inline-flex items-center gap-1 mt-1 px-2 py-0.5 rounded text-[10px] font-bold {{ $user->participant_type->badgeClass() }}">
-                                    <span class="material-symbols-outlined text-[12px]">{{ $user->participant_type->icon() }}</span>
+                                <div class="inline-flex items-center gap-1 mt-1 px-2.5 py-0.5 rounded-md text-[11px] font-bold {{ $user->participant_type->badgeClass() }}">
+                                    <span class="material-symbols-outlined text-[13px]">{{ $user->participant_type->icon() }}</span>
                                     <span>{{ $user->participant_type->label() }}</span>
                                 </div>
                             @elseif($user->expertise)
-                                <div class="text-[11px] text-outline truncate max-w-xs mt-0.5">
-                                    {{ $user->expertise }}
+                                <div class="inline-flex items-center gap-1 mt-1 px-2 py-0.5 rounded text-[10px] font-semibold bg-surface-container text-on-surface-variant">
+                                    <span class="material-symbols-outlined text-[12px]">psychology</span>
+                                    <span>{{ $user->expertise }}</span>
                                 </div>
                             @endif
                         </td>

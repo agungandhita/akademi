@@ -39,6 +39,7 @@ class RegisterPesertaDTO
         return match (strtolower(trim($raw))) {
             'guru', 'guru & tenaga pendidik' => ParticipantType::Guru,
             'siswa', 'mahasiswa / pelajar', 'pelajar', 'mahasiswa' => ParticipantType::Siswa,
+            'praktisi', 'profesional', 'profesional & praktisi', 'profesional / praktisi' => ParticipantType::Praktisi,
             default => ParticipantType::Umum,
         };
     }

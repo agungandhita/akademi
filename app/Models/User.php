@@ -132,5 +132,31 @@ class User extends Authenticatable
     {
         return $this->hasMany(Post::class, 'author_id');
     }
+
+    /**
+     * Relasi ke modul materi yang dibuat oleh tentor.
+     */
+    public function createdModules(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Module::class, 'created_by');
+    }
+
+    /**
+     * Relasi ke pendaftaran pelatihan pengguna.
+     */
+    public function enrollments(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Enrollment::class, 'user_id');
+    }
+
+    /**
+     * Relasi ke pelatihan yang diikuti oleh pengguna (peserta).
+     */
+    public function enrolledTrainings(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
+        return $this->belongsToMany(Training::class, 'enrollments', 'user_id', 'training_id')
+            ->withPivot(['id', 'status', 'enrolled_at', 'cancelled_at', 'completed_at'])
+            ->withTimestamps();
+    }
 }
 

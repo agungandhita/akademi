@@ -3,12 +3,15 @@
 namespace App\DTOs\Users;
 
 use App\Enums\ParticipantType;
+use App\Enums\UserRole;
 
 class UpdateUserDTO
 {
     public function __construct(
         public readonly string $name,
         public readonly string $email,
+        public readonly ?UserRole $role = null,
+        public readonly ?string $password = null,
         public readonly ?string $phone = null,
         public readonly ?string $institution = null,
         public readonly ?string $bio = null,
@@ -26,6 +29,10 @@ class UpdateUserDTO
         return new self(
             name: $data['name'],
             email: $data['email'],
+            role: isset($data['role'])
+                ? ($data['role'] instanceof UserRole ? $data['role'] : UserRole::tryFrom($data['role']))
+                : null,
+            password: ! empty($data['password']) ? $data['password'] : null,
             phone: $data['phone'] ?? null,
             institution: $data['institution'] ?? null,
             bio: $data['bio'] ?? null,

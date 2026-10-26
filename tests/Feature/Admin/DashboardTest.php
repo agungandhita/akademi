@@ -71,5 +71,19 @@ test('admin dapat melihat dashboard dan metrik agregat statistik real-time (ADM-
     $response->assertOk()
         ->assertSee('Dashboard Manajemen Akademi Pelatihan')
         ->assertSee('Total Pengguna')
-        ->assertSee('Pelatihan');
+        ->assertSee('Pelatihan')
+        ->assertSee('1 Peserta')
+        ->assertSee('1 Admin')
+        ->assertSee('Peserta Satu')
+        ->assertSee('Mastering AI untuk Pengajar')
+        ->assertSee('1 Online');
+});
+
+test('dashboard admin menampilkan status kosong jika belum ada program pelatihan', function () {
+    $response = $this->actingAs($this->admin)
+        ->get(route('admin'));
+
+    $response->assertOk()
+        ->assertSee('Belum Ada Pelatihan')
+        ->assertSee('Buat Pelatihan');
 });

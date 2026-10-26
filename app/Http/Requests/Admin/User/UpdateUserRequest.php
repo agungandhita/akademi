@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Admin\User;
 
 use App\Enums\ParticipantType;
+use App\Enums\UserRole;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -23,6 +24,8 @@ class UpdateUserRequest extends FormRequest
         return [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users', 'email')->ignore($userId)],
+            'role' => ['nullable', Rule::enum(UserRole::class)],
+            'password' => ['nullable', 'string', 'min:8'],
             'phone' => ['nullable', 'string', 'max:20'],
             'institution' => ['nullable', 'string', 'max:255'],
             'bio' => ['nullable', 'string'],

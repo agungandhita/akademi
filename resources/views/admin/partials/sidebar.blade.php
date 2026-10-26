@@ -101,9 +101,6 @@
             </ul>
         </div>
 
-        <!-- ============================================== -->
-        <!-- ROLE: TENTOR / INSTRUKTUR MENUS               -->
-        <!-- ============================================== -->
         @elseif ($activeRole === 'tentor')
         <div>
             <h6 class="px-3 text-[11px] font-bold text-outline uppercase tracking-wider mb-2">
@@ -111,35 +108,33 @@
             </h6>
             <ul class="space-y-1">
                 <li>
-                    <a href="{{ url('/tentor') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold transition-all {{ request()->is('tentor') ? 'bg-secondary text-white shadow-xs' : 'text-on-surface-variant hover:bg-surface-container-low hover:text-primary' }}">
-                        <span class="material-symbols-outlined text-[20px]">dashboard</span>
+                    <a href="{{ route('tentor') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold transition-all {{ request()->routeIs('tentor') ? 'bg-secondary text-white shadow-xs' : 'text-on-surface-variant hover:bg-surface-container-low hover:text-primary' }}">
+                        <span class="material-symbols-outlined text-[20px] {{ request()->routeIs('tentor') ? 'text-white' : 'text-outline' }}">dashboard</span>
                         <span>Dashboard Tentor</span>
                     </a>
                 </li>
                 <li>
-                    <a href="{{ url('/tentor') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-medium text-on-surface-variant hover:bg-surface-container-low hover:text-primary transition-all">
-                        <span class="material-symbols-outlined text-[20px] text-outline">co_present</span>
+                    <a href="{{ route('tentor.trainings') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold transition-all {{ request()->routeIs('tentor.trainings*') ? 'bg-secondary text-white shadow-xs' : 'text-on-surface-variant hover:bg-surface-container-low hover:text-primary' }}">
+                        <span class="material-symbols-outlined text-[20px] {{ request()->routeIs('tentor.trainings*') ? 'text-white' : 'text-outline' }}">co_present</span>
                         <span>Pelatihan Ditugaskan</span>
                     </a>
                 </li>
                 <li>
-                    <a href="{{ url('/tentor') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-medium text-on-surface-variant hover:bg-surface-container-low hover:text-primary transition-all">
-                        <span class="material-symbols-outlined text-[20px] text-outline">menu_book</span>
+                    <a href="{{ route('tentor.modules.index') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold transition-all {{ request()->routeIs('tentor.modules.*') ? 'bg-secondary text-white shadow-xs' : 'text-on-surface-variant hover:bg-surface-container-low hover:text-primary' }}">
+                        <span class="material-symbols-outlined text-[20px] {{ request()->routeIs('tentor.modules.*') ? 'text-white' : 'text-outline' }}">menu_book</span>
                         <span>Kelola Modul Pembelajaran</span>
                     </a>
                 </li>
                 <li>
-                    <a href="{{ url('/tentor') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-medium text-on-surface-variant hover:bg-surface-container-low hover:text-primary transition-all">
-                        <span class="material-symbols-outlined text-[20px] text-outline">badge</span>
+                    <a href="{{ route('tentor.profile') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold transition-all {{ request()->routeIs('tentor.profile*') ? 'bg-secondary text-white shadow-xs' : 'text-on-surface-variant hover:bg-surface-container-low hover:text-primary' }}">
+                        <span class="material-symbols-outlined text-[20px] {{ request()->routeIs('tentor.profile*') ? 'text-white' : 'text-outline' }}">badge</span>
                         <span>Profil &amp; Keahlian</span>
                     </a>
                 </li>
             </ul>
         </div>
 
-        <!-- ============================================== -->
-        <!-- ROLE: PESERTA PELATIHAN MENUS                 -->
-        <!-- ============================================== -->
+     
         @else
         <div>
             <h6 class="px-3 text-[11px] font-bold text-outline uppercase tracking-wider mb-2">
@@ -147,27 +142,21 @@
             </h6>
             <ul class="space-y-1">
                 <li>
-                    <a href="{{ url('/peserta') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold transition-all {{ request()->is('peserta') ? 'bg-secondary text-white shadow-xs' : 'text-on-surface-variant hover:bg-surface-container-low hover:text-primary' }}">
-                        <span class="material-symbols-outlined text-[20px]">school</span>
+                    <a href="{{ route('peserta') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold transition-all {{ request()->routeIs('peserta') ? 'bg-secondary text-white shadow-xs' : 'text-on-surface-variant hover:bg-surface-container-low hover:text-primary' }}">
+                        <span class="material-symbols-outlined text-[20px] {{ request()->routeIs('peserta') ? 'text-white' : 'text-outline' }}">school</span>
                         <span>Portal Peserta</span>
                     </a>
                 </li>
                 <li>
-                    <a href="{{ url('/peserta') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-medium text-on-surface-variant hover:bg-surface-container-low hover:text-primary transition-all">
-                        <span class="material-symbols-outlined text-[20px] text-outline">book</span>
+                    <a href="{{ route('peserta.trainings') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold transition-all {{ request()->routeIs('peserta.trainings') ? 'bg-secondary text-white shadow-xs' : 'text-on-surface-variant hover:bg-surface-container-low hover:text-primary' }}">
+                        <span class="material-symbols-outlined text-[20px] {{ request()->routeIs('peserta.trainings') ? 'text-white' : 'text-outline' }}">book</span>
                         <span>Pelatihan Saya</span>
                     </a>
                 </li>
                 <li>
-                    <a href="{{ url('/agenda') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-medium text-on-surface-variant hover:bg-surface-container-low hover:text-primary transition-all">
+                    <a href="{{ route('agenda') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-medium text-on-surface-variant hover:bg-surface-container-low hover:text-primary transition-all">
                         <span class="material-symbols-outlined text-[20px] text-outline">explore</span>
                         <span>Telusuri Agenda Baru</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ url('/peserta') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-medium text-on-surface-variant hover:bg-surface-container-low hover:text-primary transition-all">
-                        <span class="material-symbols-outlined text-[20px] text-outline">person</span>
-                        <span>Profil &amp; Akun</span>
                     </a>
                 </li>
             </ul>
@@ -176,7 +165,7 @@
 
         <!-- Quick Back to Main Site -->
         <div class="pt-4 border-t border-outline-variant/40">
-            <a href="{{ url('/') }}" class="flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-medium text-outline hover:text-secondary transition-colors">
+            <a href="{{ route('home') }}" class="flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-medium text-outline hover:text-secondary transition-colors">
                 <span class="material-symbols-outlined text-[18px]">arrow_back</span>
                 <span>Kembali ke Beranda</span>
             </a>

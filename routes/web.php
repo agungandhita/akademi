@@ -13,16 +13,12 @@ use App\Http\Controllers\Admin\PostController;
 use App\Http\Controllers\Admin\TentorController;
 use App\Http\Controllers\Admin\TrainingCategoryController;
 use App\Http\Controllers\Admin\TrainingController;
+use App\Http\Controllers\Admin\TrainingParticipantController as AdminTrainingParticipantController;
 use App\Http\Controllers\Admin\UserController;
-/*
-|--------------------------------------------------------------------------
-| Web Routes - Akademi Pelatihan
-|--------------------------------------------------------------------------
-*/
-
-// ==========================================
-// 1. PUBLIC MARKETING & KNOWLEDGE BASE
-// ==========================================
+use App\Http\Controllers\Peserta\PesertaDashboardController;
+use App\Http\Controllers\Tentor\TentorDashboardController;
+use App\Http\Controllers\Tentor\TentorModuleController;
+use App\Http\Controllers\Tentor\TrainingParticipantController as TentorTrainingParticipantController;
 
 Route::get('/', function (PostInterface $postService) {
     return view('frontend.beranda.index', [
@@ -34,6 +30,7 @@ Route::get('/', function (PostInterface $postService) {
 
 Route::get('/agenda', [AgendaController::class, 'index'])->name('agenda');
 Route::get('/agenda/{slug}', [AgendaController::class, 'show'])->name('agenda.detail');
+Route::post('/agenda/{slug}/daftar', [AgendaController::class, 'enroll'])->name('agenda.enroll');
 
 Route::get('/berita', [BeritaController::class, 'index'])->name('berita');
 Route::get('/berita/{slug}', [BeritaController::class, 'show'])->name('berita.detail');
@@ -91,6 +88,10 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
     Route::delete('/trainings/{training}/sessions/{session}', [TrainingController::class, 'destroySession'])->name('admin.trainings.sessions.destroy');
     Route::post('/trainings/{training}/instructors', [TrainingController::class, 'syncInstructors'])->name('admin.trainings.instructors.sync');
 
+    // ADM-08: Daftar Peserta Pelatihan & Ekspor CSV
+    Route::get('/trainings/{training}/participants', [AdminTrainingParticipantController::class, 'index'])->name('admin.trainings.participants');
+    Route::get('/trainings/{training}/participants/export', [AdminTrainingParticipantController::class, 'export'])->name('admin.trainings.participants.export');
+
     // ADM-10: Berita & Artikel (Bisa diakses melalui URL /admin/posts maupun /admin/berita)
     Route::resource('posts', PostController::class, ['as' => 'admin']);
     Route::resource('berita', PostController::class, [
@@ -108,19 +109,34 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
 });
 
 Route::middleware(['auth', 'role:tentor'])->prefix('tentor')->group(function () {
-    Route::get('/', function () {
-        return view('admin.tentor.index', [
-            'currentRole' => 'tentor',
-            'title' => 'Dashboard Tentor & Instruktur - Akademi Pelatihan',
-        ]);
-    })->name('tentor');
+    // TNT-01: Dashboard Instruktur
+    Route::get('/', [TentorDashboardController::class, 'index'])->name('tentor');
+
+    // TNT-02: Pelatihan Ditugaskan
+    Route::get('/pelatihan', [TentorDashboardController::class, 'trainings'])->name('tentor.trainings');
+
+    // TNT-06: Daftar Peserta Pelatihan (Read-only)
+    Route::get('/trainings/{training}/participants', [TentorTrainingParticipantController::class, 'index'])->name('tentor.trainings.participants');
+
+    // TNT-03 s.d. TNT-05: Modul Pembelajaran (CRUD)
+    Route::resource('modul', TentorModuleController::class, ['as' => 'tentor'])->parameters(['modul' => 'module'])->names([
+        'index' => 'tentor.modules.index',
+        'create' => 'tentor.modules.create',
+        'store' => 'tentor.modules.store',
+        'edit' => 'tentor.modules.edit',
+        'update' => 'tentor.modules.update',
+        'destroy' => 'tentor.modules.destroy',
+    ])->except(['show']);
+
+    // TNT-07: Profil & Keahlian Instruktur
+    Route::get('/profil', [TentorDashboardController::class, 'profile'])->name('tentor.profile');
+    Route::put('/profil', [TentorDashboardController::class, 'updateProfile'])->name('tentor.profile.update');
 });
 
 Route::middleware(['auth', 'role:peserta'])->prefix('peserta')->group(function () {
-    Route::get('/', function () {
-        return view('admin.peserta.index', [
-            'currentRole' => 'peserta',
-            'title' => 'Portal Pembelajaran Peserta - Akademi Pelatihan',
-        ]);
-    })->name('peserta');
+    Route::get('/', [PesertaDashboardController::class, 'index'])->name('peserta');
+    Route::get('/pelatihan', [PesertaDashboardController::class, 'trainings'])->name('peserta.trainings');
+    // PST-05, PST-07: Ruang Belajar & Akses Modul Pembelajaran
+    Route::get('/pelatihan/{training}', [PesertaDashboardController::class, 'showTraining'])->name('peserta.trainings.show');
+    Route::get('/pelatihan/{training}/modul/{module}', [PesertaDashboardController::class, 'showModule'])->name('peserta.trainings.modules.show');
 });

@@ -6,6 +6,7 @@ enum ParticipantType: string
 {
     case Guru = 'guru';
     case Siswa = 'siswa';
+    case Praktisi = 'praktisi';
     case Umum = 'umum';
 
     /**
@@ -16,6 +17,7 @@ enum ParticipantType: string
         return match ($this) {
             self::Guru => 'Guru & Tenaga Pendidik',
             self::Siswa => 'Siswa / Mahasiswa',
+            self::Praktisi => 'Profesional & Praktisi',
             self::Umum => 'Masyarakat Umum / Vokasi',
         };
     }
@@ -28,6 +30,7 @@ enum ParticipantType: string
         return match ($this) {
             self::Guru => 'bg-secondary-fixed text-on-secondary-fixed',
             self::Siswa => 'bg-tertiary-fixed text-primary',
+            self::Praktisi => 'bg-primary-container text-on-primary-container',
             self::Umum => 'bg-surface-container-high text-on-surface-variant',
         };
     }
@@ -40,6 +43,7 @@ enum ParticipantType: string
         return match ($this) {
             self::Guru => 'badge',
             self::Siswa => 'backpack',
+            self::Praktisi => 'business_center',
             self::Umum => 'person',
         };
     }

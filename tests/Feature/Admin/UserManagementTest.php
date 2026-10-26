@@ -187,3 +187,52 @@ test('peserta tidak memiliki izin untuk melihat detail pengguna lain (403)', fun
         ->get(route('admin.users.show', $targetUser->id))
         ->assertForbidden();
 });
+
+test('admin dapat menyaring pengguna berdasarkan kategori peserta (participant_type)', function () {
+    User::create([
+        'name' => 'Dr. Guru Matematika',
+        'email' => 'guru.mtk@example.com',
+        'password' => bcrypt('password'),
+        'role' => UserRole::Peserta,
+        'participant_type' => ParticipantType::Guru,
+    ]);
+
+    User::create([
+        'name' => 'Agung Praktisi IT',
+        'email' => 'agung.praktisi@example.com',
+        'password' => bcrypt('password'),
+        'role' => UserRole::Peserta,
+        'participant_type' => ParticipantType::Praktisi,
+    ]);
+
+    $response = $this->actingAs($this->admin)
+        ->get(route('admin.users.index', ['participant_type' => 'praktisi']));
+
+    $response->assertOk()
+        ->assertSee('Agung Praktisi IT')
+        ->assertDontSee('Dr. Guru Matematika');
+});
+
+test('admin dapat mengubah peran (role) dan kata sandi pengguna', function () {
+    $user = User::create([
+        'name' => 'Peserta Calon Tentor',
+        'email' => 'calon.tentor@example.com',
+        'password' => bcrypt('oldpassword123'),
+        'role' => UserRole::Peserta,
+    ]);
+
+    $response = $this->actingAs($this->admin)
+        ->put(route('admin.users.update', $user->id), [
+            'name' => 'Peserta Calon Tentor',
+            'email' => 'calon.tentor@example.com',
+            'role' => UserRole::Tentor->value,
+            'password' => 'newpassword123',
+            'expertise' => 'Digital Marketing & Content',
+        ]);
+
+    $response->assertRedirect(route('admin.users.index'));
+
+    $freshUser = $user->fresh();
+    expect($freshUser->role)->toBe(UserRole::Tentor);
+    expect(\Illuminate\Support\Facades\Hash::check('newpassword123', $freshUser->password))->toBeTrue();
+});
