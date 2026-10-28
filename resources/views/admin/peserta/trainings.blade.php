@@ -130,6 +130,7 @@
                                class="px-3 py-2.5 rounded-xl border border-outline-variant hover:bg-surface-container text-xs font-semibold text-on-surface-variant transition-colors"
                                title="Lihat Detail Brosur Publik">
                                 <span class="material-symbols-outlined text-[16px]">visibility</span>
+                            </a>
                         </div>
                     </div>
                 @endif
