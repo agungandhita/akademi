@@ -171,7 +171,7 @@
                                          src="{{ $bannerUrl }}" />
                                 </div>
                             @else
-                                <div class="w-full h-[280px] sm:h-[360px] flex flex-col items-center justify-center p-8 bg-linear-to-br from-primary to-primary-container text-white text-center">
+                                <div class="w-full h-[280px] sm:h-[360px] flex flex-col items-center justify-center p-8 bg-primary bg-gradient-to-br from-primary to-primary-container text-white text-center">
                                     <span class="material-symbols-outlined text-6xl text-white/50 mb-2">school</span>
                                     <span class="font-headline text-lg font-bold">{{ $training->title }}</span>
                                     <span class="text-xs text-white/80 mt-1">Akademi Pelatihan Indonesia</span>

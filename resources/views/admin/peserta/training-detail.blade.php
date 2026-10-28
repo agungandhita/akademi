@@ -13,7 +13,7 @@
     </div>
 
     <!-- Header Banner Ruang Belajar -->
-    <div class="rounded-2xl p-6 sm:p-8 bg-linear-to-r from-primary to-primary-container text-white relative overflow-hidden shadow-md">
+    <div class="bg-primary rounded-2xl p-6 sm:p-8 bg-gradient-to-r from-primary to-primary-container text-white relative overflow-hidden shadow-md">
         <div class="relative z-10 max-w-3xl">
             <div class="flex flex-wrap items-center gap-2 mb-3">
                 <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md text-tertiary-fixed-dim text-xs font-bold border border-white/10">
