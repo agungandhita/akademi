@@ -121,6 +121,16 @@
 
                         <!-- CTA Actions -->
                         <div class="flex items-center gap-2 self-start lg:self-center shrink-0 pt-2 lg:pt-0">
+                            @if($training->whatsapp_group_link)
+                                <a href="{{ $training->whatsapp_group_link }}" target="_blank" rel="noopener noreferrer" 
+                                   class="px-3.5 py-2.5 bg-[#25D366] hover:bg-[#20ba5a] text-white font-headline text-xs font-bold rounded-xl shadow-xs transition-all flex items-center gap-1.5 hover:scale-[1.02]"
+                                   title="Masuk Grup WhatsApp Koordinasi Pelatihan">
+                                    <svg class="w-4 h-4 fill-current shrink-0" viewBox="0 0 24 24">
+                                        <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.669-.699c.969.539 1.761.815 2.791.815 3.181 0 5.767-2.586 5.768-5.766 0-3.18-2.586-5.766-5.768-5.766zm9.969 5.766c0 5.503-4.466 9.969-9.969 9.969-1.748 0-3.376-.452-4.795-1.24l-5.236 1.373 1.397-5.107c-.901-1.488-1.435-3.234-1.435-5.095 0-5.503 4.466-9.969 9.969-9.969 5.503 0 9.969 4.466 9.969 9.969zm-5.467 3.513c-.234-.117-1.385-.683-1.6-.761-.215-.078-.372-.117-.528.117s-.607.761-.744.918c-.137.156-.273.176-.507.059-.234-.117-.988-.364-1.882-1.161-.696-.621-1.166-1.388-1.303-1.622-.137-.234-.015-.361.103-.477.106-.105.234-.273.351-.41.117-.137.156-.234.234-.39.078-.156.039-.293-.02-.41s-.528-1.27-.723-1.738c-.19-.457-.384-.395-.528-.402l-.45-.008c-.156 0-.41.059-.625.293s-.82 1.015-.82 2.476 1.055 2.871 1.202 3.066c.146.195 2.076 3.169 5.029 4.444.702.304 1.25.485 1.677.621.705.224 1.347.193 1.854.117.565-.085 1.738-.71 1.982-1.395.244-.684.244-1.27.171-1.395-.074-.124-.23-.195-.464-.312z"/>
+                                    </svg>
+                                    <span>Grup WA</span>
+                                </a>
+                            @endif
                             <a href="{{ route('peserta.trainings.show', $training->id) }}" 
                                class="px-4 py-2.5 bg-secondary hover:bg-secondary-container text-white font-headline text-xs font-bold rounded-xl shadow-xs transition-all flex items-center gap-1.5 hover:scale-[1.02]">
                                 <span class="material-symbols-outlined text-[16px]">play_lesson</span>
@@ -128,7 +138,7 @@
                             </a>
                             <a href="{{ route('agenda.detail', $training->slug) }}" 
                                class="px-3 py-2.5 rounded-xl border border-outline-variant hover:bg-surface-container text-xs font-semibold text-on-surface-variant transition-colors"
-                               title="Lihat Detail Brosur Publik">
+                                title="Lihat Detail Brosur Publik">
                                 <span class="material-symbols-outlined text-[16px]">visibility</span>
                             </a>
                         </div>

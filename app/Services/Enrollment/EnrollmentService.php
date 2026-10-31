@@ -4,8 +4,10 @@ namespace App\Services\Enrollment;
 
 use App\Enums\EnrollmentStatus;
 use App\Enums\TrainingStatus;
+use App\Enums\UserRole;
 use App\Models\Enrollment;
 use App\Models\Training;
+use App\Models\User;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Validation\ValidationException;
@@ -31,6 +33,20 @@ class EnrollmentService implements EnrollmentInterface
         return Enrollment::with(['user', 'training'])
             ->where('training_id', $trainingId)
             ->latest('enrolled_at')
+            ->get();
+    }
+
+    public function getNonEnrolledUsers(int $trainingId): Collection
+    {
+        return User::where('role', UserRole::Peserta->value)
+            ->where('is_active', true)
+            ->whereNotNull('phone')
+            ->where('phone', '!=', '')
+            ->whereDoesntHave('enrollments', function ($query) use ($trainingId) {
+                $query->where('training_id', $trainingId)
+                    ->where('status', '!=', EnrollmentStatus::Cancelled->value);
+            })
+            ->orderBy('name')
             ->get();
     }
 

@@ -99,6 +99,7 @@
 
         <div class="divide-y divide-outline-variant/30">
             @forelse($assignedTrainings ?? [] as $training)
+            @php /** @var \App\Models\Training $training */ @endphp
             <div class="p-5 sm:p-6 flex flex-col md:flex-row md:items-center justify-between gap-4 hover:bg-surface-container-low/40 transition-colors">
                 <div class="flex items-start gap-4">
                     <div class="w-12 h-12 rounded-xl bg-primary text-white flex items-center justify-center font-headline font-bold shrink-0">

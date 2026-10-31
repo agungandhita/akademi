@@ -28,6 +28,13 @@ interface EnrollmentInterface
     public function getAllParticipantsByTraining(int $trainingId): Collection;
 
     /**
+     * Mengambil daftar user ber-role peserta yang belum terdaftar di pelatihan tertentu (untuk blast ajakan pendaftaran).
+     *
+     * @return Collection<int, \App\Models\User>
+     */
+    public function getNonEnrolledUsers(int $trainingId): Collection;
+
+    /**
      * Mendaftarkan pengguna (peserta) ke suatu pelatihan.
      */
     public function enroll(int $userId, int $trainingId): Enrollment;

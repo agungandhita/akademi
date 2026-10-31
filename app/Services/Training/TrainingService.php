@@ -72,6 +72,7 @@ class TrainingService implements TrainingInterface
             'end_date' => $dto->end_date,
             'location' => $dto->location,
             'meeting_url' => $dto->meeting_url,
+            'whatsapp_group_link' => $dto->whatsapp_group_link,
             'created_by' => $dto->created_by,
         ]);
     }
@@ -99,6 +100,7 @@ class TrainingService implements TrainingInterface
             'end_date' => $dto->end_date,
             'location' => $dto->location,
             'meeting_url' => $dto->meeting_url,
+            'whatsapp_group_link' => $dto->whatsapp_group_link,
         ]);
 
         return $training;

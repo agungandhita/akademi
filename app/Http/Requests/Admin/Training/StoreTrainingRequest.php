@@ -36,6 +36,7 @@ class StoreTrainingRequest extends FormRequest
             // Aturan Bisnis 7: Field wajib berbasis mode pelatihan
             'meeting_url' => ['nullable', 'string', 'max:255', Rule::requiredIf(fn () => $this->input('mode') === TrainingMode::Online->value)],
             'location' => ['nullable', 'string', 'max:255', Rule::requiredIf(fn () => $this->input('mode') === TrainingMode::Offline->value)],
+            'whatsapp_group_link' => ['nullable', 'url', 'max:255'],
             'is_free' => ['required', 'boolean'],
             'price' => ['nullable', 'numeric', 'min:0', Rule::requiredIf(fn () => ! $this->boolean('is_free'))],
             'thumbnail' => $this->hasFile('thumbnail')
@@ -63,6 +64,7 @@ class StoreTrainingRequest extends FormRequest
             'end_date.after_or_equal' => 'Tanggal selesai harus sama atau setelah tanggal mulai.',
             'meeting_url.required' => 'Tautan meeting (Zoom/Google Meet) wajib diisi untuk pelatihan mode Online.',
             'location.required' => 'Lokasi venue fisik wajib diisi untuk pelatihan mode Offline.',
+            'whatsapp_group_link.url' => 'Tautan grup WhatsApp harus berupa format URL yang valid (contoh: https://chat.whatsapp.com/...).',
             'is_free.required' => 'Skema biaya pendaftaran (Gratis / Berbayar) wajib ditentukan.',
             'price.required' => 'Nominal biaya pelatihan wajib diisi jika pelatihan berbayar.',
             'price.numeric' => 'Nominal biaya pelatihan harus berupa angka.',

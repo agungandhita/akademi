@@ -175,6 +175,32 @@
                                 </div>
                             @endif
                         </div>
+
+                        <!-- WhatsApp Group URL -->
+                        <div class="p-3.5 rounded-xl bg-surface-container-low border border-outline-variant/50 space-y-1 sm:col-span-2">
+                            <div class="flex items-center justify-between gap-1.5 text-xs font-bold text-primary">
+                                <span class="flex items-center gap-1.5">
+                                    <span class="material-symbols-outlined text-[16px] text-emerald-600">chat</span>
+                                    <span>Tautan Grup WhatsApp Pelatihan</span>
+                                </span>
+                                <span class="text-[10px] px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-bold">Khusus Peserta Terdaftar</span>
+                            </div>
+                            @if($training->whatsapp_group_link)
+                                <div class="flex items-center gap-2 pt-0.5">
+                                    <a href="{{ $training->whatsapp_group_link }}" target="_blank" rel="noopener noreferrer" class="text-xs text-emerald-700 font-semibold hover:underline truncate block">
+                                        {{ $training->whatsapp_group_link }}
+                                    </a>
+                                    <a href="{{ $training->whatsapp_group_link }}" target="_blank" rel="noopener noreferrer" class="px-2.5 py-1 rounded-md bg-[#25D366] hover:bg-[#20ba5a] text-white text-[10px] font-bold shrink-0 transition-colors flex items-center gap-1 shadow-2xs">
+                                        <span>Buka Grup WA</span>
+                                        <span class="material-symbols-outlined text-[12px]">open_in_new</span>
+                                    </a>
+                                </div>
+                            @else
+                                <div class="text-xs text-outline italic">
+                                    Belum ada tautan grup WhatsApp yang disetel untuk pelatihan ini.
+                                </div>
+                            @endif
+                        </div>
                     </div>
                 </div>
 

@@ -363,3 +363,27 @@ test('admin dapat menghapus pendaftaran peserta dari pelatihan (ADM-08)', functi
         'id' => $enrollment->id,
     ]);
 });
+
+test('admin dapat mengakses panel broadcast wa blast dan tombol kirim wa pada daftar peserta', function () {
+    $this->training->update([
+        'whatsapp_group_link' => 'https://chat.whatsapp.com/TEST_BLAST_123',
+    ]);
+
+    Enrollment::create([
+        'user_id' => $this->peserta->id,
+        'training_id' => $this->training->id,
+        'status' => EnrollmentStatus::Registered,
+        'enrolled_at' => now(),
+    ]);
+
+    $response = $this->actingAs($this->admin)
+        ->get(route('admin.trainings.participants', $this->training->id));
+
+    $response->assertOk()
+        ->assertSee('Kirim Pengumuman WA')
+        ->assertSee('Broadcast WhatsApp Peserta Pelatihan')
+        ->assertSee('Kirim WA')
+        ->assertSee('https://chat.whatsapp.com/TEST_BLAST_123')
+        ->assertSee('Kirim ke Peserta Berikutnya');
+});
+

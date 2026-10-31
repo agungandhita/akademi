@@ -166,6 +166,40 @@
 
         <!-- Kolom Kanan: Sesi & Tautan Tatap Muka (PST-07) (4 Cols) -->
         <div class="lg:col-span-4 space-y-6">
+
+            @if($training->whatsapp_group_link)
+                <!-- Card Grup WhatsApp Koordinasi Peserta -->
+                <div class="bg-surface-container-lowest rounded-2xl border border-emerald-200 shadow-xs overflow-hidden relative">
+                    <div class="h-1.5 bg-[#25D366]"></div>
+                    <div class="p-5 space-y-3">
+                        <div class="flex items-center gap-2.5">
+                            <div class="w-9 h-9 rounded-xl bg-emerald-100 flex items-center justify-center text-[#25D366] shrink-0">
+                                <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">
+                                    <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.669-.699c.969.539 1.761.815 2.791.815 3.181 0 5.767-2.586 5.768-5.766 0-3.18-2.586-5.766-5.768-5.766zm9.969 5.766c0 5.503-4.466 9.969-9.969 9.969-1.748 0-3.376-.452-4.795-1.24l-5.236 1.373 1.397-5.107c-.901-1.488-1.435-3.234-1.435-5.095 0-5.503 4.466-9.969 9.969-9.969 5.503 0 9.969 4.466 9.969 9.969zm-5.467 3.513c-.234-.117-1.385-.683-1.6-.761-.215-.078-.372-.117-.528.117s-.607.761-.744.918c-.137.156-.273.176-.507.059-.234-.117-.988-.364-1.882-1.161-.696-.621-1.166-1.388-1.303-1.622-.137-.234-.015-.361.103-.477.106-.105.234-.273.351-.41.117-.137.156-.234.234-.39.078-.156.039-.293-.02-.41s-.528-1.27-.723-1.738c-.19-.457-.384-.395-.528-.402l-.45-.008c-.156 0-.41.059-.625.293s-.82 1.015-.82 2.476 1.055 2.871 1.202 3.066c.146.195 2.076 3.169 5.029 4.444.702.304 1.25.485 1.677.621.705.224 1.347.193 1.854.117.565-.085 1.738-.71 1.982-1.395.244-.684.244-1.27.171-1.395-.074-.124-.23-.195-.464-.312z"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <h3 class="font-headline text-sm font-bold text-primary">
+                                    Grup WhatsApp Pelatihan
+                                </h3>
+                                <p class="text-[11px] text-emerald-700 font-medium">
+                                    Koordinasi resmi sesama peserta &amp; tentor
+                                </p>
+                            </div>
+                        </div>
+
+                        <p class="text-xs text-on-surface-variant leading-relaxed">
+                            Bergabunglah ke grup WhatsApp untuk koordinasi teknis, pengingat jadwal live, dan diskusi interaktif bersama instruktur pengampu.
+                        </p>
+
+                        <a href="{{ $training->whatsapp_group_link }}" target="_blank" rel="noopener noreferrer" 
+                           class="w-full py-2.5 px-4 bg-[#25D366] hover:bg-[#20ba5a] text-white text-xs font-bold rounded-xl flex items-center justify-center gap-2 transition-all shadow-xs hover:scale-[1.01]">
+                            <span>Gabung Grup WhatsApp</span>
+                            <span class="material-symbols-outlined text-[16px]">open_in_new</span>
+                        </a>
+                    </div>
+                </div>
+            @endif
             
             <!-- Card Sesi Pertemuan -->
             <div class="bg-surface-container-lowest rounded-2xl border border-outline-variant/60 shadow-xs overflow-hidden">

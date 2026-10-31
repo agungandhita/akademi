@@ -60,7 +60,11 @@ class AgendaController extends Controller
 
         try {
             $this->enrollmentService->enroll($user->id, $training->id);
-            Alert::success('Pendaftaran Berhasil!', "Selamat, Anda telah terdaftar pada program pelatihan \"{$training->title}\".");
+            if ($training->whatsapp_group_link) {
+                session()->flash('enrolled_whatsapp_popup', true);
+            } else {
+                Alert::success('Pendaftaran Berhasil!', "Selamat, Anda telah terdaftar pada program pelatihan \"{$training->title}\".");
+            }
         } catch (\Illuminate\Validation\ValidationException $e) {
             $errors = $e->errors();
             $message = ! empty($errors) ? implode(' ', array_map(fn ($err) => implode(' ', $err), $errors)) : 'Pendaftaran gagal diproses.';

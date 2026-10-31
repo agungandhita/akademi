@@ -41,6 +41,7 @@ class Training extends Model
         'end_date',
         'location',
         'meeting_url',
+        'whatsapp_group_link',
         'created_by',
     ];
 

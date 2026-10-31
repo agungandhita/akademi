@@ -175,6 +175,23 @@
                             <p class="text-xs text-error mt-1">{{ $message }}</p>
                         @enderror
                     </div>
+
+                    <!-- WhatsApp Group Link -->
+                    <div>
+                        <label for="whatsapp_group_link" class="block font-headline text-xs font-bold text-primary mb-1.5 flex items-center justify-between">
+                            <span class="flex items-center gap-1.5">
+                                <span class="material-symbols-outlined text-[16px] text-emerald-600">chat</span>
+                                <span>Tautan Grup WhatsApp Pelatihan (Opsional)</span>
+                            </span>
+                            <span class="text-[10px] text-outline font-normal">Khusus Peserta Terdaftar</span>
+                        </label>
+                        <input type="url" id="whatsapp_group_link" name="whatsapp_group_link" value="{{ old('whatsapp_group_link') }}" placeholder="https://chat.whatsapp.com/..."
+                            class="w-full px-3.5 py-2.5 rounded-xl bg-surface-container-low border border-outline-variant/60 text-xs sm:text-sm text-on-surface focus:bg-white focus:ring-2 focus:ring-secondary/40 outline-none" />
+                        <span class="text-[10px] text-outline mt-1 block">Tautan undangan grup WhatsApp koordinasi untuk pelatihan ini. Hanya dapat dilihat dan diakses oleh peserta yang telah terdaftar resmi.</span>
+                        @error('whatsapp_group_link')
+                            <p class="text-xs text-error mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
                 </div>
             </div>
 

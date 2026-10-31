@@ -33,10 +33,14 @@ class TrainingParticipantController extends Controller
         );
 
         $counts = $this->enrollmentService->getEnrollmentCounts($trainingId);
+        $allParticipants = $this->enrollmentService->getAllParticipantsByTraining($trainingId);
+        $nonEnrolledUsers = $this->enrollmentService->getNonEnrolledUsers($trainingId);
 
         return view('admin.trainings.participants', [
             'training' => $training,
             'participants' => $participants,
+            'allParticipants' => $allParticipants,
+            'nonEnrolledUsers' => $nonEnrolledUsers,
             'counts' => $counts,
             'statuses' => EnrollmentStatus::cases(),
             'currentRole' => 'admin',

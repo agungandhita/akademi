@@ -24,6 +24,7 @@ class UpdateTrainingDTO
         public readonly ?string $registration_end = null,
         public readonly ?string $location = null,
         public readonly ?string $meeting_url = null,
+        public readonly ?string $whatsapp_group_link = null,
         public readonly ?string $thumbnail = null,
         public readonly ?array $facilities = null,
     ) {}
@@ -55,6 +56,7 @@ class UpdateTrainingDTO
             registration_end: $data['registration_end'] ?? null,
             location: $data['location'] ?? null,
             meeting_url: $data['meeting_url'] ?? null,
+            whatsapp_group_link: $data['whatsapp_group_link'] ?? null,
             thumbnail: $data['thumbnail'] ?? null,
             facilities: $facilities,
         );
