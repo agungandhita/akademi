@@ -305,8 +305,9 @@
 @endphp
 
 <!-- Modal Panel WA Blast / Broadcast Pengumuman -->
-<div id="waBlastModal" class="fixed inset-0 z-50 hidden overflow-y-auto bg-black/60 backdrop-blur-xs p-3 sm:p-5 flex items-center justify-center">
-    <div class="bg-surface-container-lowest rounded-2xl shadow-2xl w-full max-w-5xl border border-outline-variant/60 overflow-hidden flex flex-col max-h-[92vh] animate-in fade-in zoom-in-95 duration-200">
+<div id="waBlastModal" class="fixed inset-0 z-50 hidden overflow-y-auto bg-black/60 backdrop-blur-xs p-2 sm:p-4 md:p-6" onclick="if(event.target === this) closeWaBlastModal()" style="overscroll-behavior: contain;">
+    <div class="min-h-full flex items-center justify-center py-2 sm:py-4">
+        <div class="bg-surface-container-lowest rounded-2xl shadow-2xl w-full max-w-5xl border border-outline-variant/60 overflow-hidden flex flex-col max-h-[calc(100vh-2rem)] sm:max-h-[calc(100vh-3rem)] animate-in fade-in zoom-in-95 duration-200 my-auto text-left">
         
         <!-- Header Modal -->
         <div class="px-5 py-4 border-b border-outline-variant/40 flex items-center justify-between bg-surface-container-low/60 shrink-0">
@@ -570,6 +571,7 @@
             </button>
         </div>
 
+    </div>
     </div>
 </div>
 

@@ -871,51 +871,53 @@
 
 @if(session('enrolled_whatsapp_popup') && $training->whatsapp_group_link)
     <!-- Modal Popup Gabung Grup WhatsApp Pendaftaran Berhasil -->
-    <div id="whatsappModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs transition-opacity duration-300">
-        <div class="bg-surface-container-lowest rounded-2xl shadow-2xl max-w-md w-full p-6 sm:p-7 border border-outline-variant/60 relative overflow-hidden flex flex-col items-center text-center animate-in fade-in zoom-in-95 duration-200">
-            <!-- Top Accent Line -->
-            <div class="absolute top-0 left-0 right-0 h-1.5 bg-[#25D366]"></div>
+    <div id="whatsappModal" class="fixed inset-0 z-50 overflow-y-auto bg-black/60 backdrop-blur-xs p-3 sm:p-4 transition-opacity duration-300" onclick="if(event.target === this) closeWhatsappModal()" style="overscroll-behavior: contain;">
+        <div class="min-h-full flex items-center justify-center py-4">
+            <div class="bg-surface-container-lowest rounded-2xl shadow-2xl max-w-md w-full p-6 sm:p-7 border border-outline-variant/60 relative overflow-hidden flex flex-col items-center text-center animate-in fade-in zoom-in-95 duration-200 my-auto">
+                <!-- Top Accent Line -->
+                <div class="absolute top-0 left-0 right-0 h-1.5 bg-[#25D366]"></div>
 
-            <!-- Close Button -->
-            <button type="button" onclick="closeWhatsappModal()" class="absolute top-4 right-4 text-outline hover:text-on-surface p-1 rounded-lg hover:bg-surface-container transition-colors">
-                <span class="material-symbols-outlined text-[20px]">close</span>
-            </button>
+                <!-- Close Button -->
+                <button type="button" onclick="closeWhatsappModal()" class="absolute top-4 right-4 text-outline hover:text-on-surface p-1 rounded-lg hover:bg-surface-container transition-colors">
+                    <span class="material-symbols-outlined text-[20px]">close</span>
+                </button>
 
-            <!-- Icon Hero -->
-            <div class="w-16 h-16 rounded-2xl bg-emerald-100 flex items-center justify-center text-[#25D366] mb-4 shadow-sm ring-8 ring-emerald-50">
-                <svg class="w-9 h-9 fill-current" viewBox="0 0 24 24">
-                    <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.669-.699c.969.539 1.761.815 2.791.815 3.181 0 5.767-2.586 5.768-5.766 0-3.18-2.586-5.766-5.768-5.766zm9.969 5.766c0 5.503-4.466 9.969-9.969 9.969-1.748 0-3.376-.452-4.795-1.24l-5.236 1.373 1.397-5.107c-.901-1.488-1.435-3.234-1.435-5.095 0-5.503 4.466-9.969 9.969-9.969 5.503 0 9.969 4.466 9.969 9.969zm-5.467 3.513c-.234-.117-1.385-.683-1.6-.761-.215-.078-.372-.117-.528.117s-.607.761-.744.918c-.137.156-.273.176-.507.059-.234-.117-.988-.364-1.882-1.161-.696-.621-1.166-1.388-1.303-1.622-.137-.234-.015-.361.103-.477.106-.105.234-.273.351-.41.117-.137.156-.234.234-.39.078-.156.039-.293-.02-.41s-.528-1.27-.723-1.738c-.19-.457-.384-.395-.528-.402l-.45-.008c-.156 0-.41.059-.625.293s-.82 1.015-.82 2.476 1.055 2.871 1.202 3.066c.146.195 2.076 3.169 5.029 4.444.702.304 1.25.485 1.677.621.705.224 1.347.193 1.854.117.565-.085 1.738-.71 1.982-1.395.244-.684.244-1.27.171-1.395-.074-.124-.23-.195-.464-.312z"/>
-                </svg>
-            </div>
-
-            <!-- Title & Program -->
-            <h3 class="font-headline text-lg sm:text-xl font-extrabold text-primary">
-                Pendaftaran Berhasil! 🎉
-            </h3>
-            <p class="text-xs font-semibold text-secondary mt-1 max-w-sm truncate">
-                {{ $training->title }}
-            </p>
-
-            <!-- Description -->
-            <p class="text-xs text-on-surface-variant leading-relaxed mt-3">
-                Selamat, Anda telah resmi terdaftar! Silakan segera bergabung ke <strong>Grup WhatsApp Koordinasi</strong> untuk mendapatkan tautan live meeting, bimbingan langsung narasumber, dan jadwal teknis pelatihan.
-            </p>
-
-            <!-- Actions -->
-            <div class="w-full flex flex-col gap-2.5 mt-6">
-                <a href="{{ $training->whatsapp_group_link }}" target="_blank" rel="noopener noreferrer"
-                   onclick="closeWhatsappModal()"
-                   class="w-full py-3 px-4 rounded-xl bg-[#25D366] hover:bg-[#20ba5a] text-white font-headline text-xs sm:text-sm font-bold flex items-center justify-center gap-2 shadow-md transition-all hover:scale-[1.02] active:scale-[0.98]">
-                    <svg class="w-4 h-4 fill-current shrink-0" viewBox="0 0 24 24">
+                <!-- Icon Hero -->
+                <div class="w-16 h-16 rounded-2xl bg-emerald-100 flex items-center justify-center text-[#25D366] mb-4 shadow-sm ring-8 ring-emerald-50">
+                    <svg class="w-9 h-9 fill-current" viewBox="0 0 24 24">
                         <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.669-.699c.969.539 1.761.815 2.791.815 3.181 0 5.767-2.586 5.768-5.766 0-3.18-2.586-5.766-5.768-5.766zm9.969 5.766c0 5.503-4.466 9.969-9.969 9.969-1.748 0-3.376-.452-4.795-1.24l-5.236 1.373 1.397-5.107c-.901-1.488-1.435-3.234-1.435-5.095 0-5.503 4.466-9.969 9.969-9.969 5.503 0 9.969 4.466 9.969 9.969zm-5.467 3.513c-.234-.117-1.385-.683-1.6-.761-.215-.078-.372-.117-.528.117s-.607.761-.744.918c-.137.156-.273.176-.507.059-.234-.117-.988-.364-1.882-1.161-.696-.621-1.166-1.388-1.303-1.622-.137-.234-.015-.361.103-.477.106-.105.234-.273.351-.41.117-.137.156-.234.234-.39.078-.156.039-.293-.02-.41s-.528-1.27-.723-1.738c-.19-.457-.384-.395-.528-.402l-.45-.008c-.156 0-.41.059-.625.293s-.82 1.015-.82 2.476 1.055 2.871 1.202 3.066c.146.195 2.076 3.169 5.029 4.444.702.304 1.25.485 1.677.621.705.224 1.347.193 1.854.117.565-.085 1.738-.71 1.982-1.395.244-.684.244-1.27.171-1.395-.074-.124-.23-.195-.464-.312z"/>
                     </svg>
-                    <span>Gabung Grup WhatsApp Sekarang</span>
-                    <span class="material-symbols-outlined text-[16px]">open_in_new</span>
-                </a>
-                <button type="button" onclick="closeWhatsappModal()"
-                        class="w-full py-2.5 px-4 rounded-xl border border-outline-variant hover:bg-surface-container text-xs font-semibold text-on-surface-variant transition-colors">
-                    Nanti Saja / Tutup
-                </button>
+                </div>
+
+                <!-- Title & Program -->
+                <h3 class="font-headline text-lg sm:text-xl font-extrabold text-primary">
+                    Pendaftaran Berhasil! 🎉
+                </h3>
+                <p class="text-xs font-semibold text-secondary mt-1 max-w-sm truncate">
+                    {{ $training->title }}
+                </p>
+
+                <!-- Description -->
+                <p class="text-xs text-on-surface-variant leading-relaxed mt-3">
+                    Selamat, Anda telah resmi terdaftar! Silakan segera bergabung ke <strong>Grup WhatsApp Koordinasi</strong> untuk mendapatkan tautan live meeting, bimbingan langsung narasumber, dan jadwal teknis pelatihan.
+                </p>
+
+                <!-- Actions -->
+                <div class="w-full flex flex-col gap-2.5 mt-6">
+                    <a href="{{ $training->whatsapp_group_link }}" target="_blank" rel="noopener noreferrer"
+                       onclick="closeWhatsappModal()"
+                       class="w-full py-3 px-4 rounded-xl bg-[#25D366] hover:bg-[#20ba5a] text-white font-headline text-xs sm:text-sm font-bold flex items-center justify-center gap-2 shadow-md transition-all hover:scale-[1.02] active:scale-[0.98]">
+                        <svg class="w-4 h-4 fill-current shrink-0" viewBox="0 0 24 24">
+                            <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.669-.699c.969.539 1.761.815 2.791.815 3.181 0 5.767-2.586 5.768-5.766 0-3.18-2.586-5.766-5.768-5.766zm9.969 5.766c0 5.503-4.466 9.969-9.969 9.969-1.748 0-3.376-.452-4.795-1.24l-5.236 1.373 1.397-5.107c-.901-1.488-1.435-3.234-1.435-5.095 0-5.503 4.466-9.969 9.969-9.969 5.503 0 9.969 4.466 9.969 9.969zm-5.467 3.513c-.234-.117-1.385-.683-1.6-.761-.215-.078-.372-.117-.528.117s-.607.761-.744.918c-.137.156-.273.176-.507.059-.234-.117-.988-.364-1.882-1.161-.696-.621-1.166-1.388-1.303-1.622-.137-.234-.015-.361.103-.477.106-.105.234-.273.351-.41.117-.137.156-.234.234-.39.078-.156.039-.293-.02-.41s-.528-1.27-.723-1.738c-.19-.457-.384-.395-.528-.402l-.45-.008c-.156 0-.41.059-.625.293s-.82 1.015-.82 2.476 1.055 2.871 1.202 3.066c.146.195 2.076 3.169 5.029 4.444.702.304 1.25.485 1.677.621.705.224 1.347.193 1.854.117.565-.085 1.738-.71 1.982-1.395.244-.684.244-1.27.171-1.395-.074-.124-.23-.195-.464-.312z"/>
+                        </svg>
+                        <span>Gabung Grup WhatsApp Sekarang</span>
+                        <span class="material-symbols-outlined text-[16px]">open_in_new</span>
+                    </a>
+                    <button type="button" onclick="closeWhatsappModal()"
+                            class="w-full py-2.5 px-4 rounded-xl border border-outline-variant hover:bg-surface-container text-xs font-semibold text-on-surface-variant transition-colors">
+                        Nanti Saja / Tutup
+                    </button>
+                </div>
             </div>
         </div>
     </div>
