@@ -42,6 +42,17 @@ class Training extends Model
         'location',
         'meeting_url',
         'whatsapp_group_link',
+        'certificate_number',
+        'certificate_date',
+        'certificate_signer_left_title',
+        'certificate_signer_left_name',
+        'certificate_signer_left_nip',
+        'certificate_signer_left_signature',
+        'certificate_signer_right_title',
+        'certificate_signer_right_name',
+        'certificate_signer_right_nip',
+        'certificate_signer_right_signature',
+        'is_certificate_enabled',
         'created_by',
     ];
 
@@ -64,6 +75,7 @@ class Training extends Model
             'registration_end' => 'date',
             'start_date' => 'date',
             'end_date' => 'date',
+            'is_certificate_enabled' => 'boolean',
         ];
     }
 
@@ -286,5 +298,45 @@ class Training extends Model
         });
 
         return $query;
+    }
+
+    /**
+     * Cek apakah konfigurasi sertifikat sudah diisi minimal nomor dan nama penandatangan.
+     */
+    public function hasCertificateConfigured(): bool
+    {
+        return ! empty($this->certificate_number) || ! empty($this->certificate_signer_right_name);
+    }
+
+    /**
+     * Dapatkan URL tanda tangan kiri (jika ada).
+     */
+    public function getCertificateSignerLeftSignatureUrlAttribute(): ?string
+    {
+        if (empty($this->certificate_signer_left_signature)) {
+            return null;
+        }
+
+        if (Str::startsWith($this->certificate_signer_left_signature, ['http://', 'https://'])) {
+            return $this->certificate_signer_left_signature;
+        }
+
+        return asset('storage/' . $this->certificate_signer_left_signature);
+    }
+
+    /**
+     * Dapatkan URL tanda tangan kanan (jika ada).
+     */
+    public function getCertificateSignerRightSignatureUrlAttribute(): ?string
+    {
+        if (empty($this->certificate_signer_right_signature)) {
+            return null;
+        }
+
+        if (Str::startsWith($this->certificate_signer_right_signature, ['http://', 'https://'])) {
+            return $this->certificate_signer_right_signature;
+        }
+
+        return asset('storage/' . $this->certificate_signer_right_signature);
     }
 }

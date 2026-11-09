@@ -234,6 +234,14 @@
                                     </a>
                                 @endif
 
+                                <a href="{{ route('admin.trainings.participants.certificate', [$training->id, $enrollment->id]) }}" 
+                                   target="_blank"
+                                   class="inline-flex items-center gap-1 px-2.5 py-1.5 bg-amber-500/10 hover:bg-amber-500 hover:text-white font-semibold text-xs rounded-xl transition-all shadow-2xs text-amber-700 cursor-pointer"
+                                   title="Lihat & Cetak Sertifikat Peserta Ini">
+                                    <span class="material-symbols-outlined text-[15px]">workspace_premium</span>
+                                    <span class="hidden sm:inline">Sertifikat</span>
+                                </a>
+
                                 <form method="POST" action="{{ route('admin.trainings.participants.destroy', [$training->id, $enrollment->id]) }}" class="form-delete inline" data-title="{{ $user?->name ?? 'Peserta' }}">
                                     @csrf
                                     @method('DELETE')

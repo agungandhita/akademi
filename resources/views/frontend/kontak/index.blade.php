@@ -230,7 +230,7 @@
                                                 Respons Cepat
                                             </span>
                                         </div>
-                                        <p class="text-xs font-bold text-secondary mt-0.5">+62 811-9876-5432</p>
+                                        <a href="https://wa.me/6287811861297" target="_blank" rel="noopener noreferrer" class="text-xs font-bold text-secondary mt-0.5 hover:underline block">+62 878-1186-1297</a>
                                         <p class="text-[11px] text-outline">Konsultasi pendaftaran, jadwal, &amp; kurikulum.</p>
                                     </div>
                                 </div>

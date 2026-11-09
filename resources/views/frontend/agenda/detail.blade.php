@@ -778,7 +778,7 @@
                                     <span>Bagikan ke WhatsApp</span>
                                 </a>
 
-                                <a href="https://wa.me/6281234567890?text={{ urlencode('Halo Admin Akademi Pelatihan, saya ingin bertanya mengenai program: ' . $training->title) }}" 
+                                <a href="https://wa.me/6287811861297?text={{ urlencode('Halo Admin Akademi Pelatihan, saya ingin bertanya mengenai program: ' . $training->title) }}" 
                                    target="_blank" 
                                    rel="noopener noreferrer" 
                                    class="flex items-center justify-center gap-1.5 text-secondary hover:underline text-xs font-semibold py-1">

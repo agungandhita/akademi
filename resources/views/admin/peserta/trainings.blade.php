@@ -121,6 +121,14 @@
 
                         <!-- CTA Actions -->
                         <div class="flex items-center gap-2 self-start lg:self-center shrink-0 pt-2 lg:pt-0">
+                            @if($training->is_certificate_enabled)
+                                <a href="{{ route('peserta.trainings.certificate', $training->id) }}" target="_blank"
+                                   class="px-3.5 py-2.5 bg-amber-500 hover:bg-amber-600 text-white font-headline text-xs font-bold rounded-xl shadow-xs transition-all flex items-center gap-1.5 hover:scale-[1.02]"
+                                   title="Lihat & Cetak Sertifikat Kelulusan">
+                                    <span class="material-symbols-outlined text-[16px]">workspace_premium</span>
+                                    <span>Sertifikat</span>
+                                </a>
+                            @endif
                             @if($training->whatsapp_group_link)
                                 <a href="{{ $training->whatsapp_group_link }}" target="_blank" rel="noopener noreferrer" 
                                    class="px-3.5 py-2.5 bg-[#25D366] hover:bg-[#20ba5a] text-white font-headline text-xs font-bold rounded-xl shadow-xs transition-all flex items-center gap-1.5 hover:scale-[1.02]"

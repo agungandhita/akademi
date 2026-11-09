@@ -201,6 +201,35 @@
                 </div>
             @endif
             
+            <!-- Card Sertifikat Kelulusan Peserta -->
+            @if($training->is_certificate_enabled)
+                <div class="bg-gradient-to-br from-amber-500/10 via-amber-500/5 to-surface-container-lowest rounded-2xl border-2 border-amber-500/40 shadow-xs overflow-hidden p-5 space-y-3">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-amber-500 text-white flex items-center justify-center shrink-0 shadow-xs">
+                            <span class="material-symbols-outlined text-[24px]">workspace_premium</span>
+                        </div>
+                        <div>
+                            <span class="inline-flex items-center gap-1 text-[10px] font-extrabold uppercase tracking-wider text-amber-800 bg-amber-100 px-2 py-0.5 rounded-full">
+                                Resmi &amp; Terbit
+                            </span>
+                            <h3 class="font-headline text-sm font-bold text-primary mt-0.5">
+                                Sertifikat Pelatihan
+                            </h3>
+                        </div>
+                    </div>
+
+                    <p class="text-xs text-on-surface-variant leading-relaxed">
+                        Sertifikat tanda kelulusan pelatihan ini telah diterbitkan dan dapat langsung Anda buka untuk dicetak atau disimpan sebagai dokumen PDF resmi.
+                    </p>
+
+                    <a href="{{ route('peserta.trainings.certificate', $training->id) }}" target="_blank"
+                       class="w-full py-2.5 px-4 bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold rounded-xl flex items-center justify-center gap-2 transition-all shadow-xs hover:scale-[1.01]">
+                        <span class="material-symbols-outlined text-[18px]">download</span>
+                        <span>Lihat &amp; Cetak Sertifikat</span>
+                    </a>
+                </div>
+            @endif
+
             <!-- Card Sesi Pertemuan -->
             <div class="bg-surface-container-lowest rounded-2xl border border-outline-variant/60 shadow-xs overflow-hidden">
                 <div class="p-5 border-b border-outline-variant/40">

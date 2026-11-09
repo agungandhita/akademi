@@ -40,6 +40,10 @@
         </div>
         
         <div class="flex items-center gap-2 shrink-0">
+            <a href="{{ route('admin.trainings.certificate.edit', $training->id) }}" class="px-4 py-2 bg-amber-500 hover:bg-amber-600 text-white font-headline text-xs font-bold rounded-xl shadow-xs transition-colors flex items-center gap-1.5">
+                <span class="material-symbols-outlined text-[16px]">workspace_premium</span>
+                <span>Pengaturan Sertifikat</span>
+            </a>
             <a href="{{ route('admin.trainings.edit', $training->id) }}" class="px-4 py-2 bg-surface-container hover:bg-surface-container-high text-primary font-headline text-xs font-bold rounded-xl transition-colors flex items-center gap-1.5">
                 <span class="material-symbols-outlined text-[16px]">edit</span>
                 <span>Ubah Data</span>
@@ -440,6 +444,49 @@
                         <dd class="text-on-surface-variant">{{ $training->created_at->format('d/m/Y H:i') }}</dd>
                     </div>
                 </dl>
+            </div>
+
+            <!-- Card: Pengaturan Sertifikat Pelatihan -->
+            <div class="bg-surface-container-lowest p-5 rounded-2xl border border-outline-variant/60 shadow-xs space-y-3">
+                <div class="flex items-center justify-between pb-2 border-b border-outline-variant/40">
+                    <span class="text-xs font-bold text-primary uppercase tracking-wider flex items-center gap-1.5">
+                        <span class="material-symbols-outlined text-[16px] text-amber-500">workspace_premium</span>
+                        <span>Sertifikat Pelatihan</span>
+                    </span>
+                    @if($training->is_certificate_enabled)
+                        <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-100 text-emerald-800">
+                            Aktif
+                        </span>
+                    @else
+                        <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-surface-container text-outline">
+                            Nonaktif
+                        </span>
+                    @endif
+                </div>
+
+                <div class="text-xs text-on-surface-variant space-y-2">
+                    <div class="flex items-center justify-between">
+                        <span class="text-outline">Nomor Kegiatan:</span>
+                        <span class="font-mono font-semibold text-primary truncate max-w-[170px]">{{ $training->certificate_number ?? 'Belum disetel' }}</span>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <span class="text-outline">Tanggal:</span>
+                        <span class="font-semibold text-primary truncate max-w-[170px]">{{ $training->certificate_date ?? 'Mengikuti jadwal' }}</span>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <span class="text-outline">Pimpinan:</span>
+                        <span class="font-semibold text-primary truncate max-w-[170px]">{{ $training->certificate_signer_right_name ?? 'Belum disetel' }}</span>
+                    </div>
+                </div>
+
+                <div class="pt-2 flex items-center gap-2">
+                    <a href="{{ route('admin.trainings.certificate.edit', $training->id) }}" class="flex-1 py-2 px-3 bg-primary hover:bg-primary-container text-white text-xs font-bold rounded-xl text-center transition-colors shadow-2xs">
+                        Kelola Sertifikat
+                    </a>
+                    <a href="{{ route('admin.trainings.certificate.preview', $training->id) }}" target="_blank" class="p-2 border border-outline-variant/60 rounded-xl text-on-surface-variant hover:bg-surface-container transition-colors" title="Pratinjau Sertifikat">
+                        <span class="material-symbols-outlined text-[18px]">visibility</span>
+                    </a>
+                </div>
             </div>
 
             <!-- Card: Penugasan Tentor Pengampu (ADM-07) -->

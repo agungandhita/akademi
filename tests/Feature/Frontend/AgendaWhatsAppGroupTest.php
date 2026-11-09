@@ -187,7 +187,8 @@ test('halaman agenda detail menampilkan panduan langkah pendaftaran dan tombol b
         ->assertSee('Panduan Langkah Pendaftaran')
         ->assertSee('Masuk / Registrasi Akun')
         ->assertSee('Gabung Grup WhatsApp Resmi')
-        ->assertSee('Bagikan ke WhatsApp');
+        ->assertSee('Bagikan ke WhatsApp')
+        ->assertSee('https://wa.me/6287811861297');
 });
 
 test('admin dapat melihat calon peserta yang belum mendaftar dan tab ajakan daftar pada modal wa blast', function () {

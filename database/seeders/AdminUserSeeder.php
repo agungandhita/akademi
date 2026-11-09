@@ -22,7 +22,7 @@ class AdminUserSeeder extends Seeder
                 'role' => UserRole::Admin,
                 'participant_type' => null,
                 'institution' => 'Akademi Pelatihan Indonesia',
-                'phone' => '081234567890',
+                'phone' => '087811861297',
                 'bio' => 'Administrator pengelola platform Akademi Pelatihan Indonesia.',
                 'expertise' => 'Sistem & Kurikulum',
                 'is_active' => true,

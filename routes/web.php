@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Route;
 use RealRashid\SweetAlert\Facades\Alert;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\Admin\CertificateController as AdminCertificateController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\PostController;
 use App\Http\Controllers\Admin\TentorController;
@@ -15,6 +16,7 @@ use App\Http\Controllers\Admin\TrainingCategoryController;
 use App\Http\Controllers\Admin\TrainingController;
 use App\Http\Controllers\Admin\TrainingParticipantController as AdminTrainingParticipantController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Peserta\PesertaCertificateController;
 use App\Http\Controllers\Peserta\PesertaDashboardController;
 use App\Http\Controllers\Tentor\TentorDashboardController;
 use App\Http\Controllers\Tentor\TentorModuleController;
@@ -93,6 +95,12 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
     Route::get('/trainings/{training}/participants/export', [AdminTrainingParticipantController::class, 'export'])->name('admin.trainings.participants.export');
     Route::delete('/trainings/{training}/participants/{enrollment}', [AdminTrainingParticipantController::class, 'destroy'])->name('admin.trainings.participants.destroy');
 
+    // Manajemen Sertifikat Pelatihan
+    Route::get('/trainings/{training}/certificate', [AdminCertificateController::class, 'edit'])->name('admin.trainings.certificate.edit');
+    Route::put('/trainings/{training}/certificate', [AdminCertificateController::class, 'update'])->name('admin.trainings.certificate.update');
+    Route::get('/trainings/{training}/certificate/preview', [AdminCertificateController::class, 'preview'])->name('admin.trainings.certificate.preview');
+    Route::get('/trainings/{training}/participants/{enrollment}/certificate', [AdminCertificateController::class, 'showParticipant'])->name('admin.trainings.participants.certificate');
+
     // ADM-10: Berita & Artikel (Bisa diakses melalui URL /admin/posts maupun /admin/berita)
     Route::resource('posts', PostController::class, ['as' => 'admin']);
     Route::resource('berita', PostController::class, [
@@ -140,4 +148,7 @@ Route::middleware(['auth', 'role:peserta'])->prefix('peserta')->group(function (
     // PST-05, PST-07: Ruang Belajar & Akses Modul Pembelajaran
     Route::get('/pelatihan/{training}', [PesertaDashboardController::class, 'showTraining'])->name('peserta.trainings.show');
     Route::get('/pelatihan/{training}/modul/{module}', [PesertaDashboardController::class, 'showModule'])->name('peserta.trainings.modules.show');
+
+    // Sertifikat Kelulusan Peserta
+    Route::get('/pelatihan/{training}/sertifikat', [PesertaCertificateController::class, 'show'])->name('peserta.trainings.certificate');
 });

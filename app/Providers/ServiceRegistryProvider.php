@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Services\Certificate\CertificateInterface;
+use App\Services\Certificate\CertificateService;
 use App\Services\Enrollment\EnrollmentInterface;
 use App\Services\Enrollment\EnrollmentService;
 use App\Services\Module\ModuleInterface;
@@ -30,6 +32,7 @@ class ServiceRegistryProvider extends ServiceProvider
         PostInterface::class => PostService::class,
         EnrollmentInterface::class => EnrollmentService::class,
         ModuleInterface::class => ModuleService::class,
+        CertificateInterface::class => CertificateService::class,
     ];
 
     /**

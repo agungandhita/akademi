@@ -45,7 +45,7 @@ class LiveUploadedDataSeeder extends Seeder
                 'password' => '$2y$12$HY2FB78RLu7ywDawO2Fpp.DMiArM/z4a2v56jEffRcslMjqCAX0FO',
                 'role' => UserRole::Admin,
                 'institution' => 'Akademi Pelatihan Indonesia',
-                'phone' => '081234567890',
+                'phone' => '087811861297',
                 'bio' => 'Administrator pengelola platform Akademi Pelatihan Indonesia.',
                 'expertise' => 'Sistem & Kurikulum',
                 'is_active' => true,
